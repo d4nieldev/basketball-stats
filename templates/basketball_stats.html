@@ -16,14 +16,24 @@
         <h1 class="text-center">חישוב סטטיסטיקה כדורסל</h1>
         <button type="button" class="btn btn-info" id="btnNBAstats">הזנת נתוני ליגה וקבוצות ממוצעים NBA</button>
 
-        <input list="nbaPlayers" id="selectedOption">
-        <datalist id="nbaPlayers">
-            <option>--בחירת שחקנים--</option>
-            {% for player in players %}
-                <option data-link="{{ player[1] }}" value="{{ player[0] }}">
-            {% endfor %}
-        </datalist>
-        <button type="button" id="sendToStatistics">קישור לסטטיסטיקה</button>
+        <form id="getPlayerStats" method="GET">
+            <input list="nbaPlayers" id="selectedPlayer" placeholder="-- בחירת שחקן --" required>
+            <datalist id="nbaPlayers">
+                {% for player in players %}
+                    <option data-link="{{ player[1] }}" value="{{ player[0] }}">
+                {% endfor %}
+            </datalist>
+            <div id="selectYear" class="d-none">
+                <input list="years" id="selectedYear" placeholder="-- בחירת שנה --" autocomplete="off" required>
+                <datalist id="years"></datalist>
+            </div>
+            
+            <button type="submit" id="deployStats">הזן נתונים</button>
+        </form>
+
+        <div class="player-total d-none">
+            <span id="total"></span>
+        </div>
 
         <form id="statistics">
             <div class="input-group">
@@ -138,9 +148,9 @@
                 <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001">
             </div>
             <center>
-                <span id="total"></span>
                 <button type="submit" class="btn btn-primary mt-1">חישוב סטטיסטיקה</button>
             </center>
+            
             
         </form>
     </div>
