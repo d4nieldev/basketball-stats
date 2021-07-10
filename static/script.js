@@ -68,6 +68,10 @@ $(document).ready(function () {
             $("#turnovers").val(response.turnovers);
             $("#minutes_of_play").val(response.minutes_of_play);
 
+            $("#p3_team_ratio").val(response.team_p3_ratio);
+            $("#p2_team_ratio").val(response.team_p2_ratio);
+            $("#ft_team_ratio").val(response.team_ft_ratio);
+
             $("#loading").css("display", 'none');
           }
         }
@@ -106,9 +110,9 @@ $(document).ready(function () {
 
   $("#btnNBAstats").on("click", function () {
     console.log("!");
-    $("#p3_team_ratio").val("0.38");
-    $("#p2_team_ratio").val("0.48");
-    $("#ft_team_ratio").val("0.8");
+    // $("#p3_team_ratio").val("0.38");
+    // $("#p2_team_ratio").val("0.48");
+    // $("#ft_team_ratio").val("0.8");
     $("#p3_team_attack_ratio").val("0.24");
     $("#p2_team_attack_ratio").val("0.6");
     $("#ft_team_attack_ratio").val("0.16");
