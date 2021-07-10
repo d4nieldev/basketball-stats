@@ -41,34 +41,52 @@ def player_stats():
     player_stats = {}
 
     for year in player_years:
-        if not found and request.form['year'] in year.find('th').find('a').get_text():
-            found = True
+        if year.find('th') and year.find('th').find('a'):
+            if not found and request.form['year'] in year.find('th').find('a').get_text():
+                found = True
+                try:
+                    player_stats['p3_in'] = sfloat(year.findAll('td')[10].get_text())
+                    player_stats['p3_attempts'] = sfloat(year.findAll('td')[11].get_text())
 
-            player_stats['p3_in'] = sfloat(year.findAll('td')[10].get_text())
-            player_stats['p3_attempts'] = sfloat(year.findAll('td')[11].get_text())
+                    player_stats['p2_in'] = sfloat(year.findAll('td')[13].get_text())
+                    player_stats['p2_attempts'] = sfloat(year.findAll('td')[14].get_text())
 
-            player_stats['p2_in'] = sfloat(year.findAll('td')[13].get_text())
-            player_stats['p2_attempts'] = sfloat(year.findAll('td')[14].get_text())
+                    player_stats['ft_in'] = sfloat(year.findAll('td')[17].get_text())
+                    player_stats['ft_attempts'] = sfloat(year.findAll('td')[18].get_text())
 
-            player_stats['ft_in'] = sfloat(year.findAll('td')[17].get_text())
-            player_stats['ft_attempts'] = sfloat(year.findAll('td')[18].get_text())
+                    player_stats['p3_on_me'] = 0
+                    player_stats['p3_attempts_on_me'] = 0
 
-            player_stats['p3_on_me'] = 0
-            player_stats['p3_attempts_on_me'] = 0
+                    player_stats['p2_on_me'] = 0
+                    player_stats['p2_attempts_on_me'] = 0
 
-            player_stats['p2_on_me'] = 0
-            player_stats['p2_attempts_on_me'] = 0
+                    player_stats['ft_on_me'] = 0
+                    player_stats['ft_attempts_on_me'] = 0
 
-            player_stats['ft_on_me'] = 0
-            player_stats['ft_attempts_on_me'] = 0
-
-            player_stats['assists'] = sfloat(year.findAll('td')[23].get_text())
-            player_stats['d_rebounds'] = sfloat(year.findAll('td')[21].get_text())
-            player_stats['off_rebound'] = sfloat(year.findAll('td')[20].get_text())
-            player_stats['steals'] = sfloat(year.findAll('td')[24].get_text())
-            player_stats['blocks'] = sfloat(year.findAll('td')[25].get_text())
-            player_stats['turnovers'] = sfloat(year.findAll('td')[26].get_text())
-            player_stats['minutes_of_play'] = sfloat(year.findAll('td')[6].get_text())
+                    player_stats['assists'] = sfloat(year.findAll('td')[23].get_text())
+                    player_stats['d_rebounds'] = sfloat(year.findAll('td')[21].get_text())
+                    player_stats['off_rebound'] = sfloat(year.findAll('td')[20].get_text())
+                    player_stats['steals'] = sfloat(year.findAll('td')[24].get_text())
+                    player_stats['blocks'] = sfloat(year.findAll('td')[25].get_text())
+                    player_stats['turnovers'] = sfloat(year.findAll('td')[26].get_text())
+                    player_stats['minutes_of_play'] = sfloat(year.findAll('td')[6].get_text())
+                except IndexError:
+                    player_stats['error'] = "IndexError"
         
 
     return jsonify(player_stats)
+
+
+@app.route('/get_player_years', methods=['POST', 'GET'])
+def get_player_years():
+    link = request.values['link']
+
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    json_url = os.path.join(SITE_ROOT, "static/data", "players.json")
+    players_data = json.load(open(json_url))
+
+    for player in players_data:
+        if player["link"] == link:
+            return jsonify(player['years'])
+    
+    return jsonify({"error": 'didnt find player'})
