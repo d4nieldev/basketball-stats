@@ -89,16 +89,25 @@ def player_stats():
                         driver.quit()
                     
                     team_soup = BeautifulSoup(team_content, 'html.parser')
-
+                    
                     team_p3 = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[5].get_text())
                     team_p3a = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[6].get_text())
-                    player_stats['team_p3_ratio'] = round(team_p3 / team_p3a, 3)
+                    try:
+                        player_stats['team_p3_ratio'] = round(team_p3 / team_p3a, 3)
+                    except ZeroDivisionError:
+                        player_stats['team_p3_ratio'] = 0.38
                     team_p2 = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[8].get_text())
                     team_p2a = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[9].get_text())
-                    player_stats['team_p2_ratio'] = round(team_p2 / team_p2a, 3)
+                    try:
+                        player_stats['team_p2_ratio'] = round(team_p2 / team_p2a, 3)
+                    except ZeroDivisionError:
+                        player_stats['team_p2_ratio'] = 0.48
                     team_ft = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[11].get_text())
                     team_fta = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[12].get_text())
-                    player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
+                    try:
+                        player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
+                    except ZeroDivisionError:
+                        player_stats['team_ft_ratio'] = 0.8
                         
 
                 except IndexError:

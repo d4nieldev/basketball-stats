@@ -13,9 +13,7 @@
 </head>
 <body style="direction: rtl;">
     <div class="container">
-        <h1 class="text-center">חישוב סטטיסטיקה כדורסל</h1>
-        <button type="button" class="btn btn-info" id="btnNBAstats">הזנת נתוני ליגה וקבוצות ממוצעים NBA</button>
-        
+        <h1 class="text-center">חישוב סטטיסטיקה כדורסל</h1>     
         <form id="getPlayerStats" method="GET">
             <input list="nbaPlayers" id="selectedPlayer" class="form-control col-5" placeholder="-- בחירת שחקן --" required>
             <datalist id="nbaPlayers">
@@ -115,39 +113,39 @@
                 <div class="input-group-text">אחוז השלשות של הקבוצה %T3P</div>
                 <input id="p3_team_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז השלשות של הליגה %L3P</div>
-                <input id="p3_league_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="p3_league_ratio" class="form-control" type="number" step="0.001" value="0.38" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז החצי מרחק של הקבוצה %T2P</div>
                 <input id="p2_team_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז החצי מרחק של הליגה %L2P</div>
-                <input id="p2_league_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="p2_league_ratio" class="form-control" type="number" step="0.001" value="0.48" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז העונשין של הקבוצה %TFT</div>
                 <input id="ft_team_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז העונשין של הליגה %LFT</div>
-                <input id="ft_league_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="ft_league_ratio" class="form-control" type="number" step="0.001" value="0.8" required>
             </div>
             
             
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בקבוצה %OT3P</div>
-                <input id="p3_team_attack_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="p3_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.24" required>
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בליגה %OL3P</div>
-                <input id="p3_league_attack_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="p3_league_attack_ratio" class="form-control" type="number" step="0.001" value="0.24" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בקבוצה %OT2P</div>
-                <input id="p2_team_attack_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="p2_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.6" required>
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בליגה %OL2P</div>
-                <input id="p2_league_attack_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="p2_league_attack_ratio" class="form-control" type="number" step="0.001" value="0.6" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בקבוצה %OTFT</div>
-                <input id="ft_team_attack_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="ft_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.16" required>
                 <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בליגה %OLFT</div>
-                <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001" required>
+                <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001" value="0.16" required>
             </div>
             <center>
                 <button type="submit" class="btn btn-primary mt-1 mb-3">חישוב סטטיסטיקה</button>

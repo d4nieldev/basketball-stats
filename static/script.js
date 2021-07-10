@@ -100,29 +100,13 @@ $(document).ready(function () {
         'link': player_link
       },
       success: function(data){
+        $("#years").html("");
         data.forEach(element => {
           $("#years").append('<option value=' + element + '>')
         });
         
       }
     })
-  });
-
-  $("#btnNBAstats").on("click", function () {
-    console.log("!");
-    // $("#p3_team_ratio").val("0.38");
-    // $("#p2_team_ratio").val("0.48");
-    // $("#ft_team_ratio").val("0.8");
-    $("#p3_team_attack_ratio").val("0.24");
-    $("#p2_team_attack_ratio").val("0.6");
-    $("#ft_team_attack_ratio").val("0.16");
-
-    $("#p3_league_ratio").val("0.38");
-    $("#p2_league_ratio").val("0.48");
-    $("#ft_league_ratio").val("0.8");
-    $("#p3_league_attack_ratio").val("0.24");
-    $("#p2_league_attack_ratio").val("0.6");
-    $("#ft_league_attack_ratio").val("0.16");
   });
 
   $("#statistics").on("submit", function (e) {
