@@ -28,37 +28,37 @@ $(document).ready(function () {
             $("#p3_attempts").val(response.p3_attempts);
             p3_ratio = response.p3_in / response.p3_attempts;
             if (!Number.isFinite(p3_ratio)) p3_ratio = 1;
-            $("#p3_ratio").html(p3_ratio);
+            $("#p3_ratio").html("3P% = " + p3_ratio);
 
             $("#p2_in").val(response.p2_in);
             $("#p2_attempts").val(response.p2_attempts);
             p2_ratio = response.p2_in / response.p2_attempts;
             if (!Number.isFinite(p2_ratio)) p2_ratio = 1;
-            $("#p2_ratio").html(p2_ratio);
+            $("#p2_ratio").html("2P% = " + p2_ratio);
 
             $("#ft_in").val(response.ft_in);
             $("#ft_attempts").val(response.ft_attempts);
             ft_ratio = response.ft_in / response.ft_attempts;
             if (!Number.isFinite(ft_ratio)) ft_ratio = 1;
-            $("#ft_ratio").html(ft_ratio);
+            $("#ft_ratio").html("FT% = " + ft_ratio);
 
             $("#p3_on_me").val(response.p3_on_me);
             $("#p3_attempts_on_me").val(response.p3_attempts_on_me);
             p3_ratio_on_me = response.p3_on_me / response.p3_attempts_on_me;
             if (!Number.isFinite(p3_ratio_on_me)) p3_ratio_on_me = 1;
-            $("#p3_ratio_on_me").html(p3_ratio_on_me);
+            $("#p3_ratio_on_me").html("3PO% = " + p3_ratio_on_me);
 
             $("#p2_on_me").val(response.p2_on_me);
             $("#p2_attempts_on_me").val(response.p2_attempts_on_me);
             p2_ratio_on_me = response.p2_on_me / response.p2_attempts_on_me;
             if (!Number.isFinite(p2_ratio_on_me)) p2_ratio_on_me = 1;
-            $("#p2_ratio_on_me").html(p2_ratio_on_me);
+            $("#p2_ratio_on_me").html("2PO% = " + p2_ratio_on_me);
 
             $("#ft_on_me").val(response.ft_on_me);
             $("#ft_attempts_on_me").val(response.ft_attempts_on_me);
             ft_ratio_on_me = response.ft_on_me / response.ft_attempts_on_me;
             if (!Number.isFinite(ft_ratio_on_me)) ft_ratio_on_me = 1;
-            $("#ft_ratio_on_me").html(ft_ratio_on_me);
+            $("#ft_ratio_on_me").html("FTO% = " + ft_ratio_on_me);
 
             $("#assists").val(response.assists);
             $("#d_rebounds").val(response.d_rebounds);

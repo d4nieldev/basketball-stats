@@ -27,7 +27,7 @@
                 <input list="years" id="selectedYear" class="form-control col-5" placeholder="-- בחירת שנה --" autocomplete="off" required>
                 <datalist id="years"></datalist>
             </div>
-            <div id="finish-choosing" class="d-none">
+            <div id="finish-choosing" class="d-none mt-1 mb-1">
                 <button type="submit" id="deployStats" class="btn btn-success col-2">הזן נתונים</button>
                 <div class="lds-ring" id="loading" style="display: none;"><div></div><div></div><div></div><div></div></div>
             </div>
@@ -40,114 +40,114 @@
         <form id="statistics">
             <div class="input-group">
                 <div class="input-group-text">שלשות שקלעתי 3P</div>
-                <input id="p3_in" class="form-control" type="number" step="0.001">
+                <input id="p3_in" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">שלשות שנזרקו 3PA</div>
-                <input id="p3_attempts" class="form-control" type="number" step="0.001">
+                <input id="p3_attempts" class="form-control" type="number" step="0.001" required>
             </div>
             <div id="p3_ratio"></div>
             <div class="input-group">
                 <div class="input-group-text">חצי מרחק שקלעתי 2P</div>
-                <input id="p2_in" class="form-control" type="number" step="0.001">
+                <input id="p2_in" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">חצי מרחק שנזרקו 2PA</div>
-                <input id="p2_attempts" class="form-control" type="number" step="0.001">
+                <input id="p2_attempts" class="form-control" type="number" step="0.001" required>
             </div>
             <div id="p2_ratio"></div>
             <div class="input-group">
                 <div class="input-group-text">עונשין שקלעתי FT</div>
-                <input id="ft_in" class="form-control" type="number" step="0.001">
+                <input id="ft_in" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">עונשין שנזרקו FTA</div>
-                <input id="ft_attempts" class="form-control" type="number" step="0.001">
+                <input id="ft_attempts" class="form-control" type="number" step="0.001" required>
             </div>
             <div id="ft_ratio"></div>
 
             <div class="input-group">
                 <div class="input-group-text">שלשות שקלעו עליי 3PO</div>
-                <input id="p3_on_me" class="form-control" type="number" step="0.001" value="0">
+                <input id="p3_on_me" class="form-control" type="number" step="0.001" value="0" required>
                 <div class="input-group-text">שלשות שנזרקו עליי 3POA</div>
-                <input id="p3_attempts_on_me" class="form-control" type="number" step="0.001" value="0">
+                <input id="p3_attempts_on_me" class="form-control" type="number" step="0.001" value="0" required>
             </div>
             <div id="p3_ratio_on_me"></div>
             <div class="input-group">
                 <div class="input-group-text">חצי מרחק שקלעו עליי 2PO</div>
-                <input id="p2_on_me" class="form-control" type="number" step="0.001" value="0">
+                <input id="p2_on_me" class="form-control" type="number" step="0.001" value="0" required>
                 <div class="input-group-text">חצי מרחק שנזרקו עליי 2POA</div>
-                <input id="p2_attempts_on_me" class="form-control" type="number" step="0.001" value="0">
+                <input id="p2_attempts_on_me" class="form-control" type="number" step="0.001" value="0" required>
             </div>
             <div id="p2_ratio_on_me"></div>
             <div class="input-group">
                 <div class="input-group-text">עונשין שנקלעו בגללי FTO</div>
-                <input id="ft_on_me" class="form-control" type="number" step="0.001" value="0">
+                <input id="ft_on_me" class="form-control" type="number" step="0.001" value="0" required>
                 <div class="input-group-text">עונשין שנזרקו עליי FTOA</div>
-                <input id="ft_attempts_on_me" class="form-control" type="number" step="0.001" value="0">
+                <input id="ft_attempts_on_me" class="form-control" type="number" step="0.001" value="0" required>
             </div>
             <div id="ft_ratio_on_me"></div>
 
             <div class="input-group">
                 <div class="input-group-text">אסיסטים AST</div>
-                <input id="assists" class="form-control" type="number" step="0.001">
+                <input id="assists" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">ריבאונד הגנה DRB</div>
-                <input id="d_rebounds" class="form-control" type="number" step="0.001">
+                <input id="d_rebounds" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">ריבאונד התקפה ORB</div>
-                <input id="off_rebound" class="form-control" type="number" step="0.001">
+                <input id="off_rebound" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">חטיפות STL</div>
-                <input id="steals" class="form-control" type="number" step="0.001">
+                <input id="steals" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">בלוקים BLK</div>
-                <input id="blocks" class="form-control" type="number" step="0.001">
+                <input id="blocks" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">איבודי כדור TOV</div>
-                <input id="turnovers" class="form-control" type="number" step="0.001">
+                <input id="turnovers" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">דקות משחק MP</div>
-                <input id="minutes_of_play" class="form-control" type="number" step="0.001">
+                <input id="minutes_of_play" class="form-control" type="number" step="0.001" required>
             </div>
 
             <div class="input-group">
                 <div class="input-group-text">אחוז השלשות של הקבוצה %T3P</div>
-                <input id="p3_team_ratio" class="form-control" type="number" step="0.001">
+                <input id="p3_team_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז השלשות של הליגה %L3P</div>
-                <input id="p3_league_ratio" class="form-control" type="number" step="0.001">
+                <input id="p3_league_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז החצי מרחק של הקבוצה %T2P</div>
-                <input id="p2_team_ratio" class="form-control" type="number" step="0.001">
+                <input id="p2_team_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז החצי מרחק של הליגה %L2P</div>
-                <input id="p2_league_ratio" class="form-control" type="number" step="0.001">
+                <input id="p2_league_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז העונשין של הקבוצה %TFT</div>
-                <input id="ft_team_ratio" class="form-control" type="number" step="0.001">
+                <input id="ft_team_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז העונשין של הליגה %LFT</div>
-                <input id="ft_league_ratio" class="form-control" type="number" step="0.001">
+                <input id="ft_league_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             
             
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בקבוצה %OT3P</div>
-                <input id="p3_team_attack_ratio" class="form-control" type="number" step="0.001">
+                <input id="p3_team_attack_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בליגה %OL3P</div>
-                <input id="p3_league_attack_ratio" class="form-control" type="number" step="0.001">
+                <input id="p3_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בקבוצה %OT2P</div>
-                <input id="p2_team_attack_ratio" class="form-control" type="number" step="0.001">
+                <input id="p2_team_attack_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בליגה %OL2P</div>
-                <input id="p2_league_attack_ratio" class="form-control" type="number" step="0.001">
+                <input id="p2_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בקבוצה %OTFT</div>
-                <input id="ft_team_attack_ratio" class="form-control" type="number" step="0.001">
+                <input id="ft_team_attack_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בליגה %OLFT</div>
-                <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001">
+                <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <center>
                 <button type="submit" class="btn btn-primary mt-1 mb-3">חישוב סטטיסטיקה</button>
