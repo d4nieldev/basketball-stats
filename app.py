@@ -1,12 +1,9 @@
 import os
 import sys
 import requests
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import time
 from bs4 import BeautifulSoup
+from bs4 import Comment
 from flask import Flask, render_template, json, jsonify, request
 
 app = Flask(__name__)
@@ -75,44 +72,45 @@ def player_stats():
                     player_stats['blocks'] = sfloat(year.findAll('td')[25].get_text())
                     player_stats['turnovers'] = sfloat(year.findAll('td')[26].get_text())
                     player_stats['minutes_of_play'] = sfloat(year.findAll('td')[6].get_text())
-
-                    team_url = "https://www.basketball-reference.com" + year.find('td', {'data-stat': 'team_id'}).find('a')['href']
-                    driver = webdriver.Chrome('chromedriver.exe')
-                    driver.get(team_url)
-
-                    try:
-                        element = WebDriverWait(driver, 10).until(
-                            EC.presence_of_element_located((By.ID, "team_and_opponent"))
-                        )
-                    finally:
-                        team_content = driver.page_source.encode('utf-8').strip()
-                        driver.quit()
                     
-                    team_soup = BeautifulSoup(team_content, 'html.parser')
-                    
-                    team_p3 = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[5].get_text())
-                    team_p3a = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[6].get_text())
                     try:
-                        player_stats['team_p3_ratio'] = round(team_p3 / team_p3a, 3)
-                    except ZeroDivisionError:
-                        player_stats['team_p3_ratio'] = 0.38
-                    team_p2 = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[8].get_text())
-                    team_p2a = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[9].get_text())
-                    try:
-                        player_stats['team_p2_ratio'] = round(team_p2 / team_p2a, 3)
-                    except ZeroDivisionError:
-                        player_stats['team_p2_ratio'] = 0.48
-                    team_ft = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[11].get_text())
-                    team_fta = sfloat(team_soup.find("table", {'id': 'team_and_opponent'}).find('tbody').find('tr').findAll('td')[12].get_text())
-                    try:
-                        player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
-                    except ZeroDivisionError:
-                        player_stats['team_ft_ratio'] = 0.8
+                        team_url = "https://www.basketball-reference.com" + year.find('td', {'data-stat': 'team_id'}).find('a')['href']
+                        team_content = requests.get(team_url).content
+                        team_soup = BeautifulSoup(team_content, 'html.parser')
+
+                        comments = team_soup.find_all(string=lambda text: isinstance(text, Comment))
+                        team_stats_soup = BeautifulSoup(comments[34], 'html.parser')
+                        team_stats = team_stats_soup.find('table').find('tbody').find('tr')
+
+                        team_3p = sfloat(team_stats.findAll('td')[5].get_text())
+                        team_3pa = sfloat(team_stats.findAll('td')[6].get_text())
+                        try:
+                            player_stats['team_p3_ratio'] = round(team_3p / team_3pa, 3)
+                        except ZeroDivisionError:
+                            player_stats['team_p3_ratio'] = 0.38
+
+                        team_2p = sfloat(team_stats.findAll('td')[8].get_text())
+                        team_2pa = sfloat(team_stats.findAll('td')[9].get_text())
+                        try:
+                            player_stats['team_p2_ratio'] = round(team_2p / team_2pa, 3)
+                        except ZeroDivisionError:
+                            player_stats['team_p2_ratio'] = 0.38
+
+                        team_ft = sfloat(team_stats.findAll('td')[11].get_text())
+                        team_fta = sfloat(team_stats.findAll('td')[12].get_text())
+                        try:
+                            player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
+                        except ZeroDivisionError:
+                            player_stats['team_ft_ratio'] = 0.38
                         
+                    except TypeError:
+                        # no team info
+                        player_stats['team_p3_ratio'] = 0.38
+                        player_stats['team_p2_ratio'] = 0.48
+                        player_stats['team_ft_ratio'] = 0.8      
 
                 except IndexError:
                     player_stats['error'] = "IndexError"
-        
 
     return jsonify(player_stats)
 
