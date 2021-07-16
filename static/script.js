@@ -176,10 +176,8 @@ $(document).ready(function () {
     ft_league_attack_ratio = parseFloat($("#ft_league_attack_ratio").val());
 
     assist_val =
-      3 * p3_league_attack_ratio +
-      2 * p2_league_attack_ratio -
-      (3 * p3_team_ratio * p3_team_attack_ratio +
-        2 * p2_team_attack_ratio * p2_team_ratio);
+      3 * p3_league_attack_ratio * (1 - p3_team_ratio) +
+      2 * p2_league_attack_ratio * (1 - p2_team_ratio)
     d_rebound_val =
       3 * p3_league_attack_ratio * p3_league_ratio +
       2 * p2_league_attack_ratio * p2_league_ratio +
@@ -197,6 +195,13 @@ $(document).ready(function () {
       d_rebound_val +
       2 * p2_league_ratio * p2_league_attack_ratio +
       2 * ft_league_ratio * ft_league_attack_ratio;
+
+    console.log('assist_val: ' + assist_val);
+    console.log('d_rebound_val: ' + d_rebound_val);
+    console.log('off_rebound_val: ' + off_rebound_val);
+    console.log('steal_val: ' + steal_val);
+    console.log('block_val: ' + block_val);
+    console.log('turnover_val: ' + turnover_val);
 
     total =
       3 * p3_in * p3_ratio +
