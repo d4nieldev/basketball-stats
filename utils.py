@@ -162,9 +162,9 @@ def calc_rating(player_stats):
     assist_val = 3 * p3_league_attack_ratio + 2 * p2_league_attack_ratio - (3 * p3_team_ratio * p3_team_attack_ratio + 2 * p2_team_attack_ratio * p2_team_ratio)
     d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
     off_rebound_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio
-    steal_val = d_rebound_val + 3 * p3_ratio * p3_league_attack_ratio + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio;
+    steal_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio;
     block_val = 0.57 * d_rebound_val
-    turnover_val = d_rebound_val + 3 * p3_league_ratio * p3_league_attack_ratio + 2 * p2_league_ratio * p2_league_attack_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
+    turnover_val = d_rebound_val + 2 * p2_league_ratio * p2_league_attack_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
     total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
     total /= minutes_of_play
 

@@ -62,11 +62,12 @@ def get_best_year():
 
     for year in years:
         if int(year.split('-')[0]) >= 1977:
+            print(int(year.split('-')[0]))
             temp = calc_rating(get_player_year_stats(soup, year))
             if temp > rating:
                 rating = temp
                 best_year = years[index]
-            index += 1
+        index += 1
 
     return jsonify({'best_year': best_year})
 
