@@ -225,4 +225,37 @@ $(document).ready(function () {
       300
     );
   });
+
+  $("#selectBestYear").on("click", function () {
+    years = "";
+    $("#years")
+      .find("option")
+      .each(function () {
+        years += " " + $(this).val();
+      });
+    link = "";
+    $("#nbaPlayers")
+      .find("option")
+      .each(function () {
+        if ($(this).val() == $("#selectedPlayer").val()) {
+          link = $(this).data("link");
+        }
+      });
+
+    $("#loading_best_year").css("display", "block");
+    $.ajax({
+      method: "POST",
+      url: "/get_best_year",
+      data: {
+        link: link,
+        years: years,
+      },
+      success: function (response) {
+        best_year = response.best_year;
+        $("#selectedYear").val(best_year);
+        $("#loading_best_year").css("display", "none");
+        $("#selectedYear").trigger("change");
+      },
+    });
+  });
 });

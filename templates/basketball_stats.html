@@ -15,15 +15,19 @@
     <div class="container">
         <h1 class="text-center">חישוב סטטיסטיקה כדורסל</h1>     
         <form id="getPlayerStats" method="GET">
-            <input list="nbaPlayers" id="selectedPlayer" class="form-control col-5" placeholder="-- בחירת שחקן --" required>
+            <input list="nbaPlayers" id="selectedPlayer" class="form-control" placeholder="-- בחירת שחקן --" required>
             <datalist id="nbaPlayers">
                 {% for player in players %}
                     <option data-link="{{ player[1] }}" value="{{ player[0] }}">
                 {% endfor %}
             </datalist>
             <div id="selectYear" class="d-none">
-                <input list="years" id="selectedYear" class="form-control col-5" placeholder="-- בחירת שנה --" autocomplete="off" required>
-                <datalist id="years"></datalist>
+                <div class="input-group">
+                    <input list="years" id="selectedYear" class="form-control" placeholder="-- בחירת שנה --" autocomplete="off" required>
+                    <datalist id="years"></datalist>
+                    <button type="button" id="selectBestYear" class="btn btn-danger">השנה הטובה ביותר</button>
+                    <div class="lds-ring" id="loading_best_year" style="display: none;"><div></div><div></div><div></div><div></div></div>
+                </div>
             </div>
             <div id="finish-choosing" class="d-none mt-1 mb-1">
                 <button type="submit" id="deployStats" class="btn btn-success col-2">הזן נתונים</button>
@@ -121,7 +125,7 @@
                 <div class="input-group-text">אחוז החצי מרחק של הקבוצה %T2P</div>
                 <input id="p2_team_ratio" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">אחוז החצי מרחק של הליגה %L2P</div>
-                <input id="p2_league_ratio" class="form-control" type="number" step="0.001" value="0.48" required>
+                <input id="p2_league_ratio" class="form-control" type="number" step="0.001" value="0.5" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז העונשין של הקבוצה %TFT</div>
