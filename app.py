@@ -94,20 +94,25 @@ def player_stats():
                         try:
                             player_stats['team_p2_ratio'] = round(team_2p / team_2pa, 3)
                         except ZeroDivisionError:
-                            player_stats['team_p2_ratio'] = 0.38
+                            player_stats['team_p2_ratio'] = 0.5
 
                         team_ft = sfloat(team_stats.findAll('td')[11].get_text())
                         team_fta = sfloat(team_stats.findAll('td')[12].get_text())
                         try:
                             player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
                         except ZeroDivisionError:
-                            player_stats['team_ft_ratio'] = 0.38
+                            player_stats['team_ft_ratio'] = 0.8
                         
                     except TypeError:
                         # no team info
                         player_stats['team_p3_ratio'] = 0.38
-                        player_stats['team_p2_ratio'] = 0.48
+                        player_stats['team_p2_ratio'] = 0.5
                         player_stats['team_ft_ratio'] = 0.8      
+                    except AttributeError:
+                        # no team info
+                        player_stats['team_p3_ratio'] = 0.38
+                        player_stats['team_p2_ratio'] = 0.5
+                        player_stats['team_ft_ratio'] = 0.8  
 
                 except IndexError:
                     player_stats['error'] = "IndexError"

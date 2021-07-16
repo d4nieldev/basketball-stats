@@ -29,12 +29,13 @@
                 <button type="submit" id="deployStats" class="btn btn-success col-2">הזן נתונים</button>
                 <div class="lds-ring" id="loading" style="display: none;"><div></div><div></div><div></div><div></div></div>
             </div>
+            <div class="player-total d-none">
+                <span id="total"></span>
+            </div>
         </form>
         <br />
 
-        <div class="player-total d-none">
-            <span id="total"></span>
-        </div>
+        
 
         <form id="statistics">
             <div class="input-group">
@@ -169,7 +170,7 @@
                         </div>
                     </div>
                     <h5> </h3>
-                    <div class="border border-2 border-dark mb-3">
+                    <div class="border border-2 border-dark mb-3 text-start p-2">
                         <b>AST VALUE</b> = 3 x OL3P% <b>+</b> 2 x OL2P% <b>-</b> (3 x T3P% x OT3P% <b>+</b> 2 x T2P% x OT2P%)
                         <br>
                         <b>DRB VALUE</b> = 3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT%

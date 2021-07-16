@@ -22,7 +22,7 @@
     margin: 2rem;
     border-radius: 5px;
     width:fit-content;
-    position: absolute;
+    display: inline;
 }
 .lds-ring {
     display: inline-block;
@@ -62,4 +62,11 @@
 
 .formulas{
   font-family: Math;
+}
+#total{
+  font-size: 2rem;
+}
+#finish-choosing{
+  width:fit-content;
+  display: inline;
 }
