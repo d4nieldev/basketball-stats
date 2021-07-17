@@ -29,9 +29,12 @@ def player_stats():
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
 
-    player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
+    is_playoff = bool(request.form['playoffs'] == 'Playoffs')
+    if is_playoff:
+        player_years = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
+    else:
+        player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
 
-    print(request.form['playoffs'])
 
     return jsonify(get_player_year_stats(player_years, request.form['year']))
 
