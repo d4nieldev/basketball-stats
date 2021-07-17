@@ -27,7 +27,7 @@ def get_best_year(link, years_season, years_playoffs):
     if best_year_season != -1:
         player_years_season = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
         for year in tqdm(years_season, desc=f"{link} - Season [{years_season[index]}]", leave=False):
-            if int(year.split('-')[0]) >= 1977:
+            if int(year.split('-')[0]) >= 1979:
                 temp_season = calc_rating(get_player_year_stats(player_years_season, year))
 
                 if temp_season > rating_season:

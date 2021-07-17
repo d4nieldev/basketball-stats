@@ -72,6 +72,9 @@ $(document).ready(function () {
           $("#p2_team_ratio").val(response.team_p2_ratio);
           $("#ft_team_ratio").val(response.team_ft_ratio);
 
+          $("#p3_team_attack_ratio").val(response.p3_team_attack_ratio);
+          $("#p2_team_attack_ratio").val(response.p2_team_attack_ratio);
+
           $("html, body").animate(
             {
               scrollTop: $(document).height() - $(window).height(),
@@ -88,10 +91,10 @@ $(document).ready(function () {
     $("#finish-choosing").removeClass("d-none");
   });
 
-  $("#selectedPlayer").on("change", function () {
+  $("#selectedPlayer, #selectPlayoffs").on("change", function () {
     $("#selectYear").removeClass("d-none");
     $("#selectedYear").val("");
-    player_name = $(this).val();
+    player_name = $("#selectedPlayer").val();
     player_link = "";
     $("#nbaPlayers>option").each(function () {
       if (player_name == $(this).val()) {
@@ -103,8 +106,10 @@ $(document).ready(function () {
       url: "/get_player_years",
       data: {
         link: player_link,
+        playoffs: $("#selectPlayoffs").val()
       },
       success: function (data) {
+        console.log(data);
         $("#years").html("");
         data.forEach((element) => {
           $("#years").append("<option value=" + element + ">");
@@ -177,25 +182,22 @@ $(document).ready(function () {
     ft_league_attack_ratio = parseFloat($("#ft_league_attack_ratio").val());
 
     assist_val =
-      3 * p3_league_attack_ratio * (1 - p3_team_ratio) +
-      2 * p2_league_attack_ratio * (1 - p2_team_ratio)
+      3 * p3_team_attack_ratio * (1 - p3_team_ratio) +
+      2 * p2_team_attack_ratio * (1 - p2_team_ratio)
     d_rebound_val =
       3 * p3_league_attack_ratio * p3_league_ratio +
       2 * p2_league_attack_ratio * p2_league_ratio +
       2 * ft_league_ratio * ft_league_attack_ratio;
     off_rebound_val =
-      d_rebound_val +
-      2 * p2_ratio * p2_league_attack_ratio +
-      2 * ft_ratio * ft_league_attack_ratio;
-    steal_val =
-      d_rebound_val +
-      2 * p2_ratio * p2_league_attack_ratio +
-      2 * ft_ratio * ft_league_attack_ratio;
-    block_val = 0.57 * d_rebound_val;
-    turnover_val =
-      d_rebound_val +
-      2 * p2_league_ratio * p2_league_attack_ratio +
+      3 * p3_league_attack_ratio * 0.4 +
+      2 * p2_league_attack_ratio * 0.6 +
       2 * ft_league_ratio * ft_league_attack_ratio;
+    steal_val = 
+      3 * p3_league_attack_ratio * 0.4 +
+      2 * p2_league_attack_ratio * 0.7 +
+      2 * ft_league_ratio * ft_league_attack_ratio;
+    block_val = 0.57 * d_rebound_val;
+    turnover_val = steal_val
 
     console.log('assist_val: ' + assist_val);
     console.log('d_rebound_val: ' + d_rebound_val);
@@ -203,6 +205,7 @@ $(document).ready(function () {
     console.log('steal_val: ' + steal_val);
     console.log('block_val: ' + block_val);
     console.log('turnover_val: ' + turnover_val);
+    console.log('-----------------------------------------------')
 
     total =
       3 * p3_in * p3_ratio +

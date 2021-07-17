@@ -83,6 +83,9 @@ def get_player_year_stats(table, selected_year):
                             player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
                         except ZeroDivisionError:
                             player_stats['team_ft_ratio'] = LeagueStats.ft_league_ratio
+
+                        player_stats['p3_team_attack_ratio'] = round(team_3pa / (team_3pa + team_2pa + (team_fta / 2)), 3)
+                        player_stats['p2_team_attack_ratio'] = round(team_2pa / (team_3pa + team_2pa + (team_fta / 2)), 3)
                         
                     except (TypeError, AttributeError):
                         # no team info
@@ -151,20 +154,20 @@ def calc_rating(player_stats):
         ft_team_ratio = player_stats['team_ft_ratio']
 
         p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
-        p3_team_attack_ratio = LeagueStats.p3_league_attack_ratio
+        p3_team_attack_ratio = player_stats['p3_team_attack_ratio']
         p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
-        p2_team_attack_ratio = LeagueStats.p2_league_attack_ratio
+        p2_team_attack_ratio = player_stats['p2_team_attack_ratio']
         ft_league_attack_ratio = LeagueStats.ft_league_attack_ratio
         p3_league_ratio = LeagueStats.p3_league_ratio
         p2_league_ratio = LeagueStats.p2_league_ratio
         ft_league_ratio = LeagueStats.ft_league_ratio
 
-        assist_val = 3 * p3_league_attack_ratio * (1 - p3_team_ratio) + 2 * p2_league_attack_ratio * (1 - p2_team_ratio)
-        d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
-        off_rebound_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio
-        steal_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio;
-        block_val = 0.57 * d_rebound_val
-        turnover_val = d_rebound_val + 2 * p2_league_ratio * p2_league_attack_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
+        assist_val = 3 * p3_team_attack_ratio * (1 - p3_team_ratio) + 2 * p2_team_attack_ratio * (1 - p2_team_ratio)
+        d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio;
+        off_rebound_val = 3 * p3_league_attack_ratio * 0.4 + 2 * p2_league_attack_ratio * 0.6 + 2 * ft_league_ratio * ft_league_attack_ratio;
+        steal_val =  3 * p3_league_attack_ratio * 0.4 + 2 * p2_league_attack_ratio * 0.7 + 2 * ft_league_ratio * ft_league_attack_ratio;
+        block_val = 0.57 * d_rebound_val;
+        turnover_val = steal_val
         total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
         try:
             total /= minutes_of_play

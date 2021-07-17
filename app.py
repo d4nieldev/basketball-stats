@@ -42,6 +42,7 @@ def player_stats():
 @app.route('/get_player_years', methods=['POST', 'GET'])
 def get_player_years():
     link = request.values['link']
+    is_playoff = bool(request.values['playoffs'] == 'Playoffs')
 
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
     json_url = os.path.join(SITE_ROOT, "static/data", "players.json")
@@ -49,7 +50,10 @@ def get_player_years():
 
     for player in players_data:
         if player["link"] == link:
-            return jsonify(player['years'])
+            if is_playoff:
+                return jsonify(player['years_playoffs'])
+            else:
+                return jsonify(player['years_season'])
     
     return jsonify({"error": 'didnt find player'})
 
