@@ -6,26 +6,49 @@ from utils import calc_rating, get_player_year_stats
 import sys
 from tqdm import tqdm
 
-def get_best_year(link, years):
+def get_best_year(link, years_season, years_playoffs):
     url = "https://www.basketball-reference.com/players/" + link[0] + "/" + link + ".html"
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
     
-    player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
-
-    rating = 0
-    best_year = years[0]
+    rating_season = 0
+    rating_playoffs = 0
     index = 0
 
-    for year in years:
-        if int(year.split('-')[0]) >= 1977:
-            temp = calc_rating(get_player_year_stats(player_years, year))
-            if temp > rating:
-                rating = temp
-                best_year = years[index]
-        index += 1
+    try:
+        best_year_season = years_season[0]
+    except IndexError:
+        best_year_season = -1
+    try:
+        best_year_playoffs = years_playoffs[0]
+    except IndexError:
+        best_year_playoffs = -1
+
+    if best_year_season != -1:
+        player_years_season = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
+        for year in tqdm(years_season, desc=f"{link} - Season [{years_season[index]}]", leave=False):
+            if int(year.split('-')[0]) >= 1977:
+                temp_season = calc_rating(get_player_year_stats(player_years_season, year))
+
+                if temp_season > rating_season:
+                    rating_season = temp_season
+                    best_year_season = years_season[index]
+            index += 1
     
-    return best_year
+    index = 0
+
+    if best_year_playoffs != -1:
+        player_years_playoffs = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
+        for year in tqdm(years_playoffs, desc=f"{link} - Playoffs [{years_playoffs[index]}]", leave=False):
+            if int(year.split('-')[0]) >= 1977:
+                temp_playoffs = calc_rating(get_player_year_stats(player_years_playoffs, year))
+
+                if temp_playoffs > rating_playoffs:
+                    rating_playoffs = temp_playoffs
+                    best_year_playoffs = years_playoffs[index]
+            index += 1
+    
+    return best_year_season, best_year_playoffs
 
 
 def get_player_info(player_row):
@@ -39,20 +62,37 @@ def get_player_info(player_row):
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
 
-    player_rows = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
-    years = set()
-
-    for row in player_rows:
-        if row.find('th') and row.find('th').find('a'):
-            years.add(row.find('th').find('a').get_text())
+    try:
+        player_rows_season = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')   
+    except AttributeError:
+        years_season = set()
+    else:
+        years_season = set()
+        for row in player_rows_season:
+            if row.find('th') and row.find('th').find('a'):
+                years_season.add(row.find('th').find('a').get_text())
+    
+    try:
+        player_rows_playoffs = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
+        years_playoffs = set()
+    except AttributeError:
+        years_playoffs = set()
+    else:
+        for row in player_rows_playoffs:
+            if row.find('th') and row.find('th').find('a'):
+                years_playoffs.add(row.find('th').find('a').get_text())
+    
+    best_years = get_best_year(link_to_player, sorted(years_season), sorted(years_playoffs))
 
     return {
         'link': link_to_player,
         'name': player_name,
         'from': player_from,
         'to': player_to,
-        'years': sorted(years),
-        'best_year': get_best_year(link_to_player, sorted(years))
+        'years_season': sorted(years_season),
+        'years_playoffs': sorted(years_playoffs),
+        'best_year_season': best_years[0],
+        'best_year_playoffs': best_years[1]
     }
 
 def get_players():
@@ -66,7 +106,7 @@ def get_players():
         player_rows = soup.find("table", {'id': 'players'}).find("tbody").findAll('tr')
         
         for player_row in tqdm(player_rows, desc=f"Letter {c}", leave=False):
-                players.append(get_player_info(player_row))
+            players.append(get_player_info(player_row))
     
     return players
 
