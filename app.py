@@ -57,7 +57,7 @@ def get_best_year():
     soup = BeautifulSoup(content, 'html.parser')
 
     rating = 0
-    best_year = 0
+    best_year = years[0]
     index = 0
 
     for year in years:

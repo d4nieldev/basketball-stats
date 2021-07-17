@@ -8,9 +8,9 @@ class LeagueStats:
     p3_league_attack_ratio = 0.24
     p2_league_attack_ratio = 0.6
     ft_league_attack_ratio = 0.16
-    p3_league_ratio = 0.38
+    p3_league_ratio = 0.37
     p2_league_ratio = 0.5
-    ft_league_ratio = 0.8
+    ft_league_ratio = 0.78
 
 
 def sfloat(string):
@@ -97,76 +97,81 @@ def get_player_year_stats(soup, selected_year):
     return player_stats
 
 def calc_rating(player_stats):
-    p3_in = player_stats['p3_in']
-    p3_attempts = player_stats['p3_attempts']
-    try:
-        p3_ratio = p3_in / p3_attempts
-    except ZeroDivisionError:
-        p3_ratio = 0
-    
-    p2_in = player_stats['p2_in']
-    p2_attempts = player_stats['p2_attempts']
-    try:
-        p2_ratio = p2_in / p2_attempts
-    except ZeroDivisionError:
-        p2_ratio = 0
+    if not 'error' in player_stats:
+        p3_in = player_stats['p3_in']
+        p3_attempts = player_stats['p3_attempts']
+        try:
+            p3_ratio = p3_in / p3_attempts
+        except ZeroDivisionError:
+            p3_ratio = 0
+        
+        p2_in = player_stats['p2_in']
+        p2_attempts = player_stats['p2_attempts']
+        try:
+            p2_ratio = p2_in / p2_attempts
+        except ZeroDivisionError:
+            p2_ratio = 0
 
-    ft_in = player_stats['ft_in']
-    ft_attempts = player_stats['ft_attempts']
-    try:
-        ft_ratio = ft_in / ft_attempts
-    except ZeroDivisionError:
-        ft_ratio = 0
-    
-    p3_on_me = player_stats['p3_on_me']
-    p3_attempts_on_me = player_stats['p3_attempts_on_me']
-    try:
-        p3_ratio_on_me = p3_on_me / p3_attempts_on_me
-    except ZeroDivisionError:
-        p3_ratio_on_me = 0
-    
-    p2_on_me = player_stats['p2_on_me']
-    p2_attempts_on_me = player_stats['p2_attempts_on_me']
-    try:
-        p2_ratio_on_me = p2_on_me / p2_attempts_on_me
-    except ZeroDivisionError:
-        p2_ratio_on_me = 0
+        ft_in = player_stats['ft_in']
+        ft_attempts = player_stats['ft_attempts']
+        try:
+            ft_ratio = ft_in / ft_attempts
+        except ZeroDivisionError:
+            ft_ratio = 0
+        
+        p3_on_me = player_stats['p3_on_me']
+        p3_attempts_on_me = player_stats['p3_attempts_on_me']
+        try:
+            p3_ratio_on_me = p3_on_me / p3_attempts_on_me
+        except ZeroDivisionError:
+            p3_ratio_on_me = 0
+        
+        p2_on_me = player_stats['p2_on_me']
+        p2_attempts_on_me = player_stats['p2_attempts_on_me']
+        try:
+            p2_ratio_on_me = p2_on_me / p2_attempts_on_me
+        except ZeroDivisionError:
+            p2_ratio_on_me = 0
 
-    ft_on_me = player_stats['ft_on_me']
-    ft_attempts_on_me = player_stats['ft_attempts_on_me']
-    try:
-        ft_ratio_on_me = ft_on_me / ft_attempts_on_me
-    except ZeroDivisionError:
-        ft_ratio_on_me = 0
+        ft_on_me = player_stats['ft_on_me']
+        ft_attempts_on_me = player_stats['ft_attempts_on_me']
+        try:
+            ft_ratio_on_me = ft_on_me / ft_attempts_on_me
+        except ZeroDivisionError:
+            ft_ratio_on_me = 0
 
-    assists = player_stats['assists']
-    d_rebounds = player_stats['d_rebounds']
-    off_rebound = player_stats['off_rebound']
-    steals = player_stats['steals']
-    blocks = player_stats['blocks']
-    turnovers = player_stats['turnovers']
-    minutes_of_play = player_stats['minutes_of_play']
-    p3_team_ratio = player_stats['team_p3_ratio']
-    p2_team_ratio = player_stats['team_p2_ratio']
-    ft_team_ratio = player_stats['team_ft_ratio']
+        assists = player_stats['assists']
+        d_rebounds = player_stats['d_rebounds']
+        off_rebound = player_stats['off_rebound']
+        steals = player_stats['steals']
+        blocks = player_stats['blocks']
+        turnovers = player_stats['turnovers']
+        minutes_of_play = player_stats['minutes_of_play']
+        p3_team_ratio = player_stats['team_p3_ratio']
+        p2_team_ratio = player_stats['team_p2_ratio']
+        ft_team_ratio = player_stats['team_ft_ratio']
 
-    p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
-    p3_team_attack_ratio = LeagueStats.p3_league_attack_ratio
-    p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
-    p2_team_attack_ratio = LeagueStats.p2_league_attack_ratio
-    ft_league_attack_ratio = LeagueStats.ft_league_attack_ratio
-    p3_league_ratio = LeagueStats.p3_league_ratio
-    p2_league_ratio = LeagueStats.p2_league_ratio
-    ft_league_ratio = LeagueStats.ft_league_ratio
+        p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
+        p3_team_attack_ratio = LeagueStats.p3_league_attack_ratio
+        p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
+        p2_team_attack_ratio = LeagueStats.p2_league_attack_ratio
+        ft_league_attack_ratio = LeagueStats.ft_league_attack_ratio
+        p3_league_ratio = LeagueStats.p3_league_ratio
+        p2_league_ratio = LeagueStats.p2_league_ratio
+        ft_league_ratio = LeagueStats.ft_league_ratio
 
-    assist_val = 3 * p3_league_attack_ratio * (1 - p3_team_ratio) + 2 * p2_league_attack_ratio * (1 - p2_team_ratio)
-    d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
-    off_rebound_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio
-    steal_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio;
-    block_val = 0.57 * d_rebound_val
-    turnover_val = d_rebound_val + 2 * p2_league_ratio * p2_league_attack_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
-    total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
-    total /= minutes_of_play
+        assist_val = 3 * p3_league_attack_ratio * (1 - p3_team_ratio) + 2 * p2_league_attack_ratio * (1 - p2_team_ratio)
+        d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
+        off_rebound_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio
+        steal_val = d_rebound_val + 2 * p2_ratio * p2_league_attack_ratio + 2 * ft_ratio * ft_league_attack_ratio;
+        block_val = 0.57 * d_rebound_val
+        turnover_val = d_rebound_val + 2 * p2_league_ratio * p2_league_attack_ratio + 2 * ft_league_ratio * ft_league_attack_ratio
+        total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+        try:
+            total /= minutes_of_play
+        except ZeroDivisionError:
+            total = 0
 
-    return total
+        return total
+    return 0
     
