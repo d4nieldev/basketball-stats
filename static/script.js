@@ -245,19 +245,18 @@ $(document).ready(function () {
         }
       });
 
-    $("#loading_best_year").css("display", "block");
     $.ajax({
       method: "POST",
       url: "/get_best_year",
       data: {
         link: link,
-        years: years,
       },
       success: function (response) {
         best_year = response.best_year;
-        $("#selectedYear").val(best_year);
-        $("#loading_best_year").css("display", "none");
-        $("#selectedYear").trigger("change");
+        if (best_year != -1) { 
+          $("#selectedYear").val(best_year);
+          $("#selectedYear").trigger("change");
+        }
       },
     });
   });

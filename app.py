@@ -49,25 +49,18 @@ def get_player_years():
 @app.route('/get_best_year', methods=['POST', 'GET'])
 def get_best_year():
     link = request.values['link']
-    years = request.values['years']
-    years = years.split(' ')[1:]
 
-    url = "https://www.basketball-reference.com/players/" + link[0] + "/" + link + ".html"
-    content = requests.get(url).content
-    soup = BeautifulSoup(content, 'html.parser')
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    json_url = os.path.join(SITE_ROOT, "static/data", "players.json")
+    players_data = json.load(open(json_url))
 
-    rating = 0
-    best_year = years[0]
-    index = 0
+    best_year = -1
 
-    for year in years:
-        if int(year.split('-')[0]) >= 1977:
-            print(int(year.split('-')[0]))
-            temp = calc_rating(get_player_year_stats(soup, year))
-            if temp > rating:
-                rating = temp
-                best_year = years[index]
-        index += 1
+    for d in players_data:
+        if d['link'] == link:
+            best_year = d['best_year']
+            break
+    
 
     return jsonify({'best_year': best_year})
 
