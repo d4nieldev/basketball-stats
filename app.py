@@ -29,7 +29,11 @@ def player_stats():
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
 
-    return jsonify(get_player_year_stats(soup, request.form['year']))
+    player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
+
+    print(request.form['playoffs'])
+
+    return jsonify(get_player_year_stats(player_years, request.form['year']))
 
 
 @app.route('/get_player_years', methods=['POST', 'GET'])

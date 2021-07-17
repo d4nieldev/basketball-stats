@@ -19,12 +19,11 @@ def sfloat(string):
     else:
         return float(string)
 
-def get_player_year_stats(soup, selected_year):
-    player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
+def get_player_year_stats(table, selected_year):
     found = False
     player_stats = {}
 
-    for year in player_years:
+    for year in table:
         if year.find('th') and year.find('th').find('a'):
             if not found and selected_year in year.find('th').find('a').get_text():
                 found = True

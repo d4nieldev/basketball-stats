@@ -18,6 +18,7 @@ $(document).ready(function () {
       data: {
         selector: player_selector,
         year: year,
+        playoffs: $("#selectPlayoffs").val()
       },
       success: function (response) {
         if (response.error == "IndexError") {

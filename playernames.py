@@ -10,6 +10,8 @@ def get_best_year(link, years):
     url = "https://www.basketball-reference.com/players/" + link[0] + "/" + link + ".html"
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
+    
+    player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
 
     rating = 0
     best_year = years[0]
@@ -17,7 +19,7 @@ def get_best_year(link, years):
 
     for year in years:
         if int(year.split('-')[0]) >= 1977:
-            temp = calc_rating(get_player_year_stats(soup, year))
+            temp = calc_rating(get_player_year_stats(player_years, year))
             if temp > rating:
                 rating = temp
                 best_year = years[index]
