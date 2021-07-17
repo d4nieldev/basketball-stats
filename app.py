@@ -56,6 +56,7 @@ def get_player_years():
 @app.route('/get_best_year', methods=['POST', 'GET'])
 def get_best_year():
     link = request.values['link']
+    is_playoff = bool(request.values['playoffs'] == 'Playoffs')
 
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
     json_url = os.path.join(SITE_ROOT, "static/data", "players.json")
@@ -65,7 +66,7 @@ def get_best_year():
 
     for d in players_data:
         if d['link'] == link:
-            best_year = d['best_year']
+            best_year = d['best_year_playoffs'] if is_playoff else d['best_year_season']
             break
     
 

@@ -111,7 +111,9 @@ def get_players():
     return players
 
 def write_to_json(something):
+    print("Writing to file...")
     with open('players.json', 'w') as f:
         json.dump(something, f, indent=4, sort_keys=True)
+    print("Operation complete!")
 
-write_to_json(something=get_players())
+write_to_json(get_players())
