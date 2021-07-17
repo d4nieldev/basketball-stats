@@ -231,12 +231,6 @@ $(document).ready(function () {
   });
 
   $("#selectBestYear").on("click", function () {
-    years = "";
-    $("#years")
-      .find("option")
-      .each(function () {
-        years += " " + $(this).val();
-      });
     link = "";
     $("#nbaPlayers")
       .find("option")
@@ -251,6 +245,7 @@ $(document).ready(function () {
       url: "/get_best_year",
       data: {
         link: link,
+        playoffs: $("#selectPlayoffs").val()
       },
       success: function (response) {
         best_year = response.best_year;
