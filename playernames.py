@@ -105,7 +105,10 @@ def get_players():
         player_rows = soup.find("table", {'id': 'players'}).find("tbody").findAll('tr')
         
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            players = list(executor.map(get_player_info, player_rows))
+            letter_list = list(executor.map(get_player_info, player_rows))
+            
+        for item in letter_list:
+            players.append(item)
     
     return players
 

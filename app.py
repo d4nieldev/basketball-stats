@@ -49,6 +49,7 @@ def get_player_years():
     players_data = json.load(open(json_url))
 
     for player in players_data:
+        print(player['link'])
         if player["link"] == link:
             if is_playoff:
                 return jsonify(player['years_playoffs'])
