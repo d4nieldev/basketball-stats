@@ -82,8 +82,8 @@ def get_player_year_stats(table, selected_year):
                         except ZeroDivisionError:
                             player_stats['team_ft_ratio'] = LeagueStats.ft_league_ratio
 
-                        player_stats['p3_team_attack_ratio'] = round(team_3pa / (team_3pa + team_2pa + (team_fta / 2)), 3)
-                        player_stats['p2_team_attack_ratio'] = round(team_2pa / (team_3pa + team_2pa + (team_fta / 2)), 3)
+                        player_stats['p3_team_attack_ratio'] = round(team_3pa / (team_3pa + team_2pa), 3)
+                        player_stats['p2_team_attack_ratio'] = round(team_2pa / (team_3pa + team_2pa), 3)
                         
                     except (TypeError, AttributeError):
                         # no team info

@@ -5,6 +5,7 @@ import json
 from utils import calc_rating, get_player_year_stats, sfloat
 from tqdm import tqdm
 import concurrent.futures
+from time import perf_counter
 
 
 def get_best_year(soup, years_season, years_playoffs):
@@ -77,8 +78,7 @@ def get_player_info(player_row):
     else:
         for row in player_rows_playoffs:
             if row.find('th') and row.find('th').find('a'):
-                if int(row.find('th').find('a').get_text().split('-')[0]) > 1979 and sfloat(row.findAll('td')[4].get_text()) > 14:
-                    years_playoffs.add(row.find('th').find('a').get_text())
+                years_playoffs.add(row.find('th').find('a').get_text())
     
     best_years = get_best_year(soup, sorted(years_season), sorted(years_playoffs))
 
@@ -106,9 +106,6 @@ def get_players():
         
         with concurrent.futures.ThreadPoolExecutor() as executor:
             players = list(executor.map(get_player_info, player_rows))
-
-        # for player_row in tqdm(player_rows, desc=f"Letter {c}"):
-        #     players.append(get_player_info(player_row))
     
     return players
 
