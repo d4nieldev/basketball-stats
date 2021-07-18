@@ -220,10 +220,13 @@ $(document).ready(function () {
       (3 * p3_on_me * p3_ratio_on_me +
         2 * p2_on_me * p2_ratio_on_me +
         1 * ft_on_me * ft_ratio_on_me);
-    total /= minutes_of_play;
-    total *= 100;
+
+    if ($("#selectMP").val() == 'efficiency'){
+      total /= minutes_of_play;
+    }
     total = total.toFixed(3);
-    $("#total").html("ניקוד שחקן: " + total + "%");
+    $("#total").html("ניקוד שחקן: " + total);
+    
     $(".player-total").removeClass("d-none");
     $("html, body").animate(
       {

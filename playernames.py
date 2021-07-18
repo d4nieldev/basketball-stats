@@ -2,15 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 from string import ascii_lowercase
 import json
-from utils import calc_rating, get_player_year_stats
-import sys
+from utils import calc_rating, get_player_year_stats, sfloat
 from tqdm import tqdm
+import concurrent.futures
 
-def get_best_year(link, years_season, years_playoffs):
-    url = "https://www.basketball-reference.com/players/" + link[0] + "/" + link + ".html"
-    content = requests.get(url).content
-    soup = BeautifulSoup(content, 'html.parser')
-    
+
+def get_best_year(soup, years_season, years_playoffs):
+    name = soup.find('h1', {'itemprop': 'name'}).find('span').get_text()
     rating_season = 0
     rating_playoffs = 0
     index = 0
@@ -19,14 +17,9 @@ def get_best_year(link, years_season, years_playoffs):
         best_year_season = years_season[0]
     except IndexError:
         best_year_season = -1
-    try:
-        best_year_playoffs = years_playoffs[0]
-    except IndexError:
-        best_year_playoffs = -1
-
-    if best_year_season != -1:
+    else:
         player_years_season = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
-        for year in tqdm(years_season, desc=f"{link} - Season [{years_season[index]}]", leave=False):
+        for year in tqdm(years_season, desc=f"{name} - Season [{years_season[index]}]", leave=False):
             if int(year.split('-')[0]) >= 1979:
                 temp_season = calc_rating(get_player_year_stats(player_years_season, year))
 
@@ -36,11 +29,15 @@ def get_best_year(link, years_season, years_playoffs):
             index += 1
     
     index = 0
-
-    if best_year_playoffs != -1:
+    
+    try:
+        best_year_playoffs = years_playoffs[0]
+    except IndexError:
+        best_year_playoffs = -1
+    else:
         player_years_playoffs = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
-        for year in tqdm(years_playoffs, desc=f"{link} - Playoffs [{years_playoffs[index]}]", leave=False):
-            if int(year.split('-')[0]) >= 1977:
+        for year in tqdm(years_playoffs, desc=f"{name} - Playoffs [{years_playoffs[index]}]", leave=False):
+            if int(year.split('-')[0]) >= 1979 and sfloat(soup.find("table", {'id': 'playoffs_per_game'}).find('a', string=year).find_parent('tr').findAll('td')[4].get_text()) > 14:
                 temp_playoffs = calc_rating(get_player_year_stats(player_years_playoffs, year))
 
                 if temp_playoffs > rating_playoffs:
@@ -69,7 +66,7 @@ def get_player_info(player_row):
     else:
         years_season = set()
         for row in player_rows_season:
-            if row.find('th') and row.find('th').find('a'):
+            if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) > 1979:
                 years_season.add(row.find('th').find('a').get_text())
     
     try:
@@ -80,9 +77,10 @@ def get_player_info(player_row):
     else:
         for row in player_rows_playoffs:
             if row.find('th') and row.find('th').find('a'):
-                years_playoffs.add(row.find('th').find('a').get_text())
+                if int(row.find('th').find('a').get_text().split('-')[0]) > 1979 and sfloat(row.findAll('td')[4].get_text()) > 14:
+                    years_playoffs.add(row.find('th').find('a').get_text())
     
-    best_years = get_best_year(link_to_player, sorted(years_season), sorted(years_playoffs))
+    best_years = get_best_year(soup, sorted(years_season), sorted(years_playoffs))
 
     return {
         'link': link_to_player,
@@ -95,6 +93,7 @@ def get_player_info(player_row):
         'best_year_playoffs': best_years[1]
     }
 
+
 def get_players():
     players = []
 
@@ -105,8 +104,11 @@ def get_players():
 
         player_rows = soup.find("table", {'id': 'players'}).find("tbody").findAll('tr')
         
-        for player_row in tqdm(player_rows, desc=f"Letter {c}", leave=False):
-            players.append(get_player_info(player_row))
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            players = list(executor.map(get_player_info, player_rows))
+
+        # for player_row in tqdm(player_rows, desc=f"Letter {c}"):
+        #     players.append(get_player_info(player_row))
     
     return players
 
@@ -116,4 +118,5 @@ def write_to_json(something):
         json.dump(something, f, indent=4, sort_keys=True)
     print("Operation complete!")
 
-write_to_json(get_players())
+if __name__ == "__main__":
+    write_to_json(get_players())

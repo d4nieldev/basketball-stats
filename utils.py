@@ -20,13 +20,11 @@ def sfloat(string):
         return float(string)
 
 def get_player_year_stats(table, selected_year):
-    found = False
     player_stats = {}
 
     for year in table:
         if year.find('th') and year.find('th').find('a'):
-            if not found and selected_year in year.find('th').find('a').get_text():
-                found = True
+            if selected_year in year.find('th').find('a').get_text():
                 try:
                     player_stats['p3_in'] = sfloat(year.findAll('td')[10].get_text())
                     player_stats['p3_attempts'] = sfloat(year.findAll('td')[11].get_text())
@@ -91,10 +89,14 @@ def get_player_year_stats(table, selected_year):
                         # no team info
                         player_stats['team_p3_ratio'] = LeagueStats.p3_league_ratio
                         player_stats['team_p2_ratio'] = LeagueStats.p2_league_ratio
-                        player_stats['team_ft_ratio'] = LeagueStats.ft_league_ratio      
+                        player_stats['team_ft_ratio'] = LeagueStats.ft_league_ratio    
+                        player_stats['p3_team_attack_ratio'] = LeagueStats.p3_league_attack_ratio
+                        player_stats['p2_team_attack_ratio'] = LeagueStats.p2_league_attack_ratio 
 
                 except IndexError:
                     player_stats['error'] = "IndexError"
+                
+                break
 
     return player_stats
 
