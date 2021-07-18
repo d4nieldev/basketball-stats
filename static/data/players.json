@@ -1,32 +1,46 @@
 [
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "1946-47",
         "best_year_season": -1,
         "from": "1947",
         "link": "zasloma01",
         "name": "Max Zaslofsky",
         "to": "1956",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "1946-47",
+            "1947-48",
+            "1948-49",
+            "1949-50",
+            "1950-51",
+            "1951-52",
+            "1953-54",
+            "1954-55"
+        ],
         "years_season": []
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "1952-53",
         "best_year_season": -1,
         "from": "1953",
         "link": "zawolze01",
         "name": "Zeke Zawoluk",
         "to": "1955",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "1952-53"
+        ],
         "years_season": []
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "2013-14",
         "best_year_season": "2020-21",
         "from": "2014",
         "link": "zelleco01",
         "name": "Cody Zeller",
         "to": "2021",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "2013-14",
+            "2015-16"
+        ],
         "years_season": [
             "2013-14",
             "2014-15",
@@ -39,23 +53,28 @@
         ]
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "1961-62",
         "best_year_season": -1,
         "from": "1962",
         "link": "zelleda01",
         "name": "Dave Zeller",
         "to": "1962",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "1961-62"
+        ],
         "years_season": []
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "1970-71",
         "best_year_season": -1,
         "from": "1971",
         "link": "zellega01",
         "name": "Gary Zeller",
         "to": "1972",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "1970-71",
+            "1971-72"
+        ],
         "years_season": []
     },
     {
@@ -81,13 +100,18 @@
         ]
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "2014-15",
         "best_year_season": "2019-20",
         "from": "2013",
         "link": "zellety01",
         "name": "Tyler Zeller",
         "to": "2020",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "2014-15",
+            "2015-16",
+            "2016-17",
+            "2017-18"
+        ],
         "years_season": [
             "2012-13",
             "2013-14",
@@ -110,25 +134,31 @@
         "years_season": []
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "1987-88",
         "best_year_season": "1987-88",
         "from": "1988",
         "link": "zevenph01",
         "name": "Phil Zevenbergen",
         "to": "1988",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "1987-88"
+        ],
         "years_season": [
             "1987-88"
         ]
     },
     {
-        "best_year_playoffs": -1,
-        "best_year_season": "2000-01",
+        "best_year_playoffs": "2000-01",
+        "best_year_season": "2004-05",
         "from": "2001",
         "link": "zhizhwa01",
         "name": "Wang Zhizhi",
         "to": "2005",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "2000-01",
+            "2001-02",
+            "2003-04"
+        ],
         "years_season": [
             "2000-01",
             "2001-02",
@@ -176,26 +206,30 @@
         ]
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "2016-17",
         "best_year_season": "2017-18",
         "from": "2017",
         "link": "zipsepa01",
         "name": "Paul Zipser",
         "to": "2018",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "2016-17"
+        ],
         "years_season": [
             "2016-17",
             "2017-18"
         ]
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "2017-18",
         "best_year_season": "2017-18",
         "from": "2018",
         "link": "zizican01",
         "name": "Ante \u017di\u017ei\u0107",
         "to": "2020",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "2017-18"
+        ],
         "years_season": [
             "2017-18",
             "2018-19",
@@ -232,6 +266,8 @@
         "name": "Ivica Zubac",
         "to": "2021",
         "years_playoffs": [
+            "2018-19",
+            "2019-20",
             "2020-21"
         ],
         "years_season": [
@@ -243,13 +279,15 @@
         ]
     },
     {
-        "best_year_playoffs": -1,
+        "best_year_playoffs": "1948-49",
         "best_year_season": -1,
         "from": "1949",
         "link": "zunicma01",
         "name": "Matt Zunic",
         "to": "1949",
-        "years_playoffs": [],
+        "years_playoffs": [
+            "1948-49"
+        ],
         "years_season": []
     }
 ]
