@@ -46,7 +46,7 @@ def get_best_year(soup, years_season, years_playoffs):
                     best_year_playoffs = years_playoffs[index]
             index += 1
     
-    return best_year_season, best_year_playoffs
+    return best_year_season, best_year_playoffs, rating_season, rating_playoffs
 
 
 def get_player_info(player_row):
@@ -94,7 +94,9 @@ def get_player_info(player_row):
         'years_season': sorted(years_season),
         'years_playoffs': sorted(years_playoffs),
         'best_year_season': best_years[0],
-        'best_year_playoffs': best_years[1]
+        'best_year_playoffs': best_years[1],
+        'rating_season': best_years[2],
+        'rating_playoffs': best_years[3]
     }
 
 

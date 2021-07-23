@@ -74,15 +74,9 @@ $(document).ready(function () {
 
           $("#p3_team_attack_ratio").val(response.p3_team_attack_ratio);
           $("#p2_team_attack_ratio").val(response.p2_team_attack_ratio);
-
-          $("html, body").animate(
-            {
-              scrollTop: $(document).height() - $(window).height(),
-            },
-            300
-          );
         }
         $("#loading").css("display", "none");
+        $("#statistics").trigger("submit");
       },
     });
   });
