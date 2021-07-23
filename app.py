@@ -57,12 +57,12 @@ def get_player_years():
     players_data = json.load(open(json_url))
 
     for player in players_data:
-        print(player['link'])
-        if player["link"] == link:
-            if is_playoff:
-                return jsonify(player['years_playoffs'])
-            else:
-                return jsonify(player['years_season'])
+        if player is not None:
+            if player["link"] == link:
+                if is_playoff:
+                    return jsonify(player['years_playoffs'])
+                else:
+                    return jsonify(player['years_season'])
     
     return jsonify({"error": 'didnt find player'})
 
@@ -78,9 +78,10 @@ def get_best_year():
     best_year = -1
 
     for d in players_data:
-        if d['link'] == link:
-            best_year = d['best_year_playoffs'] if is_playoff else d['best_year_season']
-            break
+        if d is not None:
+            if d['link'] == link:
+                best_year = d['best_year_playoffs'] if is_playoff else d['best_year_season']
+                break
     
 
     return jsonify({'best_year': best_year})
