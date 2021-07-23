@@ -166,7 +166,7 @@
                     <h2>הנוסחאות</h2>
                 </div>
                 <div class="text-center" dir="ltr">
-                    <div class="row">
+                    <div class="row pb-3">
                         <div class="col-1 my-auto fw-bold">TOTAL =</div>
                         <div class="col">
                             <div class="row">
@@ -190,10 +190,9 @@
                         <br>
                         <b>BLK VALUE</b> = <span title="The chance the ball stays in my team control after the block">0.57</span> x (3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT%)
                         <br>
-                        <b>The chance the ball stays in my team control after the block</b> = 57%
-                        <br>
                         <b>TOV VALUE</b> = 3 x OL3P% x 0.4 <b>+</b> 2 x OL2P% x 0.7 <b>+</b> 2 x OLFT% x LFT%
                         <br>
+                        
                         <div class="row">
                             <div class="col-1 my-auto fw-bold">OT3P% =</div>
                             <div class="col">
@@ -219,7 +218,45 @@
                                 <div class="row"><div class="col">T3PA <b>+</b> T2PA</div></div>
                             </div>
                         </div>
+                        <br>
+                        <b>The chance the ball stays in my team control after the block</b> = 57%
+                        <br>
+                        <b>The chance to score 3 point after offensive rebound</b> = +1%
+                        <br>
+                        <b>The chance to score 2 point after offensive rebound</b> = +3%
+                        <br>
+                        <b>The chance to score 3 point after a steal</b> = +2%
+                        <br>
+                        <b>The chance to score 2 point after a steal</b> = +6%
+                        <br>
                     </div>
+
+                    <table class="table" dir="rtl" style="font-family: Tahoma;">
+                        <thead>
+                            <th colspan="1"></th>
+                            <th colspan="2" style="border-left: 1px solid black">פלייאוף</colgroup>
+                            <th colspan="2">עונה רגילה</colgroup>
+                        </thead>
+                        <thead>
+                            <th scope="col">#</th>
+                            <th scope="col">שם השחקן</th>
+                            <th scope="col" style="border-left: 1px solid black">דירוג</th>
+                            <th scope="col">שם השחקן</th>
+                            <th scope="col">דירוג</th>
+                        </thead>
+                        <tbody>
+                            {% for i in range(100) %}
+                            <tr>
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>{{ top100playoffs_keys[i] }}</td>
+                                <td style="border-left: 1px solid black">{{ top100playoffs_items[i] }}</td>
+                                <td>{{ top100season_keys[i] }}</td>
+                                <td>{{ top100season_items[i] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+        
                     <ul class="text-end" style="font-family: Tahoma; font-size: 0.8rem;" dir="rtl">
                         <li>רק שנה עם לפחות 15 משחקי פלייאוף (מינימום משחקים כדי לקחת אליפות) נחשבת כדי שיהיה ממוצע מדויק.</li>
                         <li>האתר בוחר את השנה הכי טובה לפי הניקוד של הנוסחה באותה השנה (יעילות).</li>

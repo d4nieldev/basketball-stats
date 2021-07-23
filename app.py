@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from bs4 import Comment
 from flask import Flask, render_template, json, jsonify, request
-from utils import sfloat, get_player_year_stats, calc_rating, LeagueStats
+from utils import sfloat, get_player_year_stats, calc_rating, LeagueStats, get_top_100
 
 app = Flask(__name__)
 
@@ -16,11 +16,19 @@ def index():
     players = []
 
     for player in players_data:
-        player_string = f'{player["name"]} ({player["from"]}-{player["to"]})'
-        player_data = [player_string, player['link']]
-        players.append(player_data)
+        if player is not None:
+            player_string = f'{player["name"]} ({player["from"]}-{player["to"]})'
+            player_data = [player_string, player['link']]
+            players.append(player_data)
 
-    return render_template('basketball_stats.html', players=players)
+    top100 = get_top_100()
+    return render_template(
+        'basketball_stats.html', 
+        players=players, 
+        top100season_keys=list(top100[0].keys()),
+        top100season_items=list(top100[0].values()), 
+        top100playoffs_keys=list(top100[1].keys()),
+        top100playoffs_items=list(top100[1].values()))
 
 @app.route('/player', methods=['GET', 'POST'])
 def player_stats():

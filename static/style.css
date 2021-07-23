@@ -70,3 +70,7 @@
   width:fit-content;
   display: inline;
 }
+.rating{
+  list-style-type:decimal;
+  text-align: start;
+}
