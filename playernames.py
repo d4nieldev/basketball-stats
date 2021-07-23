@@ -67,7 +67,7 @@ def get_player_info(player_row):
     else:
         years_season = set()
         for row in player_rows_season:
-            if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) > 1979:
+            if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
                 years_season.add(row.find('th').find('a').get_text())
     
     try:
@@ -78,8 +78,12 @@ def get_player_info(player_row):
     else:
         for row in player_rows_playoffs:
             if row.find('th') and row.find('th').find('a'):
-                years_playoffs.add(row.find('th').find('a').get_text())
+                if int(row.findAll('td')[4].get_text()) > 14 and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
+                    years_playoffs.add(row.find('th').find('a').get_text())
     
+    if list(years_season) == [] and list(years_playoffs) == []:
+        return
+
     best_years = get_best_year(soup, sorted(years_season), sorted(years_playoffs))
 
     return {

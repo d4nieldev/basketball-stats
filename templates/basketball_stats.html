@@ -26,10 +26,6 @@
                     <option value="Playoffs">פלייאוף</option>
                     <option value="Season">עונה רגילה</option>
                 </select>
-                <select id="selectMP" class="form-control">
-                    <option value="efficiency">יעילות</option>
-                    <option value="power">יעילות לפי דקה אחת</option>
-                </select>
             </div>
             <div id="selectYear" class="d-none">
                 <div class="input-group">
@@ -188,9 +184,9 @@
                         <br>
                         <b>DRB VALUE</b> = 3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT%
                         <br>
-                        <b>ORB VALUE</b> = 3 x OL3P% x 0.4 <b>+</b> 2 x OL2P% x 0.6 <b>+</b> 2 x OLFT% x LFT%
+                        <b>ORB VALUE</b> = 3 x OL3P% x (L3P% + 0.01) <b>+</b> 2 x OL2P% x (L2P% + 0.03) <b>+</b> 2 x OLFT% x LFT%
                         <br>
-                        <b>STL VALUE</b> = 3 x OL3P% x 0.4 <b>+</b> 2 x OL2P% x 0.7 <b>+</b> 2 x OLFT% x LFT%
+                        <b>STL VALUE</b> = 3 x OL3P% x (L3P% + 0.02) <b>+</b> 2 x OL2P% x (L2P% + 0.06) <b>+</b> 2 x OLFT% x LFT%
                         <br>
                         <b>BLK VALUE</b> = <span title="The chance the ball stays in my team control after the block">0.57</span> x (3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT%)
                         <br>
@@ -225,11 +221,13 @@
                         </div>
                     </div>
                     <p class="text-end" style="font-family: Tahoma; font-size: 0.8rem;" dir="rtl">
+                        *רק שנה עם לפחות 15 משחקי פלייאוף (מינימום משחקים כדי לקחת אליפות) נחשבת כדי שיהיה ממוצע מדויק.
+                        <br>
                         *האתר בוחר את השנה הכי טובה לפי הניקוד של הנוסחה באותה השנה (יעילות).
                         <br>
-                        *האתר מכניס לחישוב של השנה הטובה ביותר רק שנים משנת 1979-80 ומעלה, כי לפני היו זורקים פחות שלשות וזה משפיע דרסטית.
+                        *האתר מכניס לחישוב רק את השנים 1979-80 ומעלה כי לפני שנים אלו השלשה לא הייתה קיימת.
                         <br>
-                        *כל שנה ב 25.8 נתוני השנה הטובה ביותר יתעדכנו אוטומטית.
+                        *כל שנה ב 1.8 נתוני השנה הטובה ביותר יתעדכנו אוטומטית.
                     </p>
                     
                 </div>

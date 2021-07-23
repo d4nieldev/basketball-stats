@@ -163,7 +163,6 @@ $(document).ready(function () {
     steals = parseFloat($("#steals").val());
     blocks = parseFloat($("#blocks").val());
     turnovers = parseFloat($("#turnovers").val());
-    minutes_of_play = parseFloat($("#minutes_of_play").val());
 
     p3_team_ratio = parseFloat($("#p3_team_ratio").val());
     p2_team_ratio = parseFloat($("#p2_team_ratio").val());
@@ -189,12 +188,12 @@ $(document).ready(function () {
       2 * p2_league_attack_ratio * p2_league_ratio +
       2 * ft_league_ratio * ft_league_attack_ratio;
     off_rebound_val =
-      3 * p3_league_attack_ratio * 0.4 +
-      2 * p2_league_attack_ratio * 0.6 +
+      3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) +
+      2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) +
       2 * ft_league_ratio * ft_league_attack_ratio;
     steal_val = 
-      3 * p3_league_attack_ratio * 0.4 +
-      2 * p2_league_attack_ratio * 0.7 +
+      3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) +
+      2 * p2_league_attack_ratio * (p3_league_ratio + 0.06) +
       2 * ft_league_ratio * ft_league_attack_ratio;
     block_val = 0.57 * d_rebound_val;
     turnover_val = steal_val
@@ -221,9 +220,6 @@ $(document).ready(function () {
         2 * p2_on_me * p2_ratio_on_me +
         1 * ft_on_me * ft_ratio_on_me);
 
-    if ($("#selectMP").val() == 'efficiency'){
-      total /= minutes_of_play;
-    }
     total = total.toFixed(3);
     $("#total").html("ניקוד שחקן: " + total);
     
