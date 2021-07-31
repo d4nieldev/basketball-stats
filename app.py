@@ -43,8 +43,11 @@ def player_stats():
     else:
         player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
 
-
-    return jsonify(get_player_year_stats(player_years, request.form['year']))
+    player_stats = get_player_year_stats(player_years, request.form['year'])
+    height_line = soup.find('div', {"itemtype": "https://schema.org/Person"}).findAll('p')[3].get_text().strip()
+    player_stats['height'] = int(height_line.split('(')[1].split(',')[0][:-2])
+    print(player_stats['height'])
+    return jsonify(player_stats)
 
 
 @app.route('/get_player_years', methods=['POST', 'GET'])

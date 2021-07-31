@@ -6,13 +6,22 @@ from flask import Flask, json, jsonify, request
 import json
 
 class LeagueStats:
-    p3_league_attack_ratio = 0.24
-    p2_league_attack_ratio = 0.6
-    ft_league_attack_ratio = 0.16
+    """
+    average tov per game = 15
+    average blocks per game = 5
+    average p3 attempts = 34
+    average p2 attempts = 54
+    average ft attempts = 11
+    """
+    p3_league_attack_ratio = 34 / 119 # OL3P%
+    p2_league_attack_ratio = 54 / 119
+    ft_league_attack_ratio = 11 / 119
     p3_league_ratio = 0.37
     p2_league_ratio = 0.5
     ft_league_ratio = 0.78
 
+    block_chance = 5 / 119 # OLBLK%
+    tov_chance = 15 / 119 # OLTOV%
 
 def sfloat(string):
     if string == '':
@@ -27,6 +36,8 @@ def get_player_year_stats(table, selected_year):
         if year.find('th') and year.find('th').find('a'):
             if selected_year in year.find('th').find('a').get_text():
                 try:
+                    player_stats['pos'] = str(year.find('td', {'data-stat': 'pos'}).get_text())
+
                     player_stats['p3_in'] = sfloat(year.findAll('td')[10].get_text())
                     player_stats['p3_attempts'] = sfloat(year.findAll('td')[11].get_text())
 
@@ -103,6 +114,8 @@ def get_player_year_stats(table, selected_year):
 
 def calc_rating(player_stats):
     if not 'error' in player_stats:
+        pos = player_stats['pos']
+
         p3_in = player_stats['p3_in']
         p3_attempts = player_stats['p3_attempts']
         try:
@@ -165,13 +178,24 @@ def calc_rating(player_stats):
         p2_league_ratio = LeagueStats.p2_league_ratio
         ft_league_ratio = LeagueStats.ft_league_ratio
 
-        assist_val = 3 * p3_team_attack_ratio * (1 - p3_team_ratio) + 2 * p2_team_attack_ratio * (1 - p2_team_ratio)
-        d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio;
-        off_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) + 2 * ft_league_ratio * ft_league_attack_ratio;
-        steal_val =  3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.06) + 2 * ft_league_ratio * ft_league_attack_ratio;
-        block_val = 0.57 * d_rebound_val;
+
+        steal_val =  3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.06) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio) - LeagueStats.tov_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio + 2 * LeagueStats.ft_league_attack_ratio)
         turnover_val = steal_val
+        assist_val = 3 * p3_team_attack_ratio * (1 - p3_team_ratio) + 2 * p2_team_attack_ratio * (1 - p2_team_ratio)
+        d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio) - LeagueStats.tov_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio + 2 * LeagueStats.ft_league_attack_ratio)
+        off_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio) - LeagueStats.tov_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio + 2 * LeagueStats.ft_league_attack_ratio)
+        block_val = 0.57 * d_rebound_val
+
         total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+
+        
+        """
+        After averages are ready
+        if pos == 'PG':
+            total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers * (total_tov_avg / total_tov_pg_avg) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+        else:
+            total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+        """
 
         return total
     return 0

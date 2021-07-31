@@ -7,6 +7,8 @@ from tqdm import tqdm
 import concurrent.futures
 from time import perf_counter
 
+MINIMUM_GAMES_FOR_PLAYOFFS = 12
+
 
 def get_best_year(soup, years_season, years_playoffs):
     name = soup.find('h1', {'itemprop': 'name'}).find('span').get_text()
@@ -38,7 +40,7 @@ def get_best_year(soup, years_season, years_playoffs):
     else:
         player_years_playoffs = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
         for year in tqdm(years_playoffs, desc=f"{name} - Playoffs [{years_playoffs[index]}]", leave=False):
-            if int(year.split('-')[0]) >= 1979 and sfloat(soup.find("table", {'id': 'playoffs_per_game'}).find('a', string=year).find_parent('tr').findAll('td')[4].get_text()) > 14:
+            if int(year.split('-')[0]) >= 1979 and sfloat(soup.find("table", {'id': 'playoffs_per_game'}).find('a', string=year).find_parent('tr').findAll('td')[4].get_text()) >= MINIMUM_GAMES_FOR_PLAYOFFS:
                 temp_playoffs = calc_rating(get_player_year_stats(player_years_playoffs, year))
 
                 if temp_playoffs > rating_playoffs:
@@ -78,8 +80,12 @@ def get_player_info(player_row):
     else:
         for row in player_rows_playoffs:
             if row.find('th') and row.find('th').find('a'):
-                if int(row.findAll('td')[4].get_text()) > 14 and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
-                    years_playoffs.add(row.find('th').find('a').get_text())
+                if int(row.findAll('td')[4].get_text()) > MINIMUM_GAMES_FOR_PLAYOFFS and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
+                    if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF']:
+                        if sfloat(row.findAll('td')[10].get_text()) <= 0:
+                            years_playoffs.add(row.find('th').find('a').get_text())
+                    else:
+                        years_playoffs.add(row.find('th').find('a').get_text())
     
     if list(years_season) == [] and list(years_playoffs) == []:
         return

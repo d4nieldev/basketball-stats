@@ -24,6 +24,9 @@ $(document).ready(function () {
         if (response.error == "IndexError") {
           alert("הייתה בעיה עם השנה שנבחרה, אנא בחר שנה אחרת");
         } else {
+          $("#pos").val(response.pos);
+          $("#height").val(response.height);
+
           $("#p3_in").val(response.p3_in);
           $("#p3_attempts").val(response.p3_attempts);
           p3_ratio = response.p3_in / response.p3_attempts;

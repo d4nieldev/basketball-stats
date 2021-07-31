@@ -48,6 +48,15 @@
 
         <form id="statistics">
             <div class="input-group">
+                <div class="input-group-text">עמדה (POS)</div>
+                <input id="pos" class="form-control" required></input>
+                <div class="input-group-text">גובה (HGT)</div>
+                <input id="height" class="form-control" type="number" required></input>
+            </div>
+            <div class="input-group">
+                
+            </div>
+            <div class="input-group">
                 <div class="input-group-text">שלשות שקלעתי 3P</div>
                 <input id="p3_in" class="form-control" type="number" step="0.001" required>
                 <div class="input-group-text">שלשות שנזרקו 3PA</div>
@@ -144,19 +153,19 @@
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בקבוצה %OT3P</div>
                 <input id="p3_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.24" required>
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בליגה %OL3P</div>
-                <input id="p3_league_attack_ratio" class="form-control" type="number" step="0.001" value="0.24" required>
+                <input id="p3_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בקבוצה %OT2P</div>
                 <input id="p2_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.6" required>
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בליגה %OL2P</div>
-                <input id="p2_league_attack_ratio" class="form-control" type="number" step="0.001" value="0.6" required>
+                <input id="p2_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בקבוצה %OTFT</div>
                 <input id="ft_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.16" required>
                 <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בליגה %OLFT</div>
-                <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001" value="0.16" required>
+                <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <center>
                 <button type="submit" class="btn btn-primary mt-1 mb-3">חישוב סטטיסטיקה</button>
@@ -231,6 +240,13 @@
                         <br>
                     </div>
 
+                    <ul class="text-end" style="font-family: Tahoma; font-size: 0.8rem;" dir="rtl">
+                        <li>רק שנה עם לפחות 12 משחקי פלייאוף (מינימום משחקים כדי לקחת אליפות) נחשבת כדי שיהיה ממוצע מדויק.</li>
+                        <li>האתר בוחר את השנה הכי טובה לפי הניקוד של הנוסחה באותה השנה (יעילות).</li>
+                        <li>האתר מכניס לחישוב רק את השנים 1979-80 ומעלה כי לפני שנים אלו השלשה לא הייתה קיימת.</li>
+                        <li>כל שנה ב 1.8 נתוני השנה הטובה ביותר יתעדכנו אוטומטית.</li>
+                    </ul>
+
                     <table class="table" dir="rtl" style="font-family: Tahoma;">
                         <thead>
                             <th colspan="1"></th>
@@ -256,14 +272,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-        
-                    <ul class="text-end" style="font-family: Tahoma; font-size: 0.8rem;" dir="rtl">
-                        <li>רק שנה עם לפחות 15 משחקי פלייאוף (מינימום משחקים כדי לקחת אליפות) נחשבת כדי שיהיה ממוצע מדויק.</li>
-                        <li>האתר בוחר את השנה הכי טובה לפי הניקוד של הנוסחה באותה השנה (יעילות).</li>
-                        <li>האתר מכניס לחישוב רק את השנים 1979-80 ומעלה כי לפני שנים אלו השלשה לא הייתה קיימת.</li>
-                        <li>כל שנה ב 1.8 נתוני השנה הטובה ביותר יתעדכנו אוטומטית.</li>
-                    </ul>
-                    
                 </div>
             </div>
             
