@@ -63,6 +63,10 @@ def get_player_year_stats(table, selected_year):
                     player_stats['blocks'] = sfloat(year.findAll('td')[25].get_text())
                     player_stats['turnovers'] = sfloat(year.findAll('td')[26].get_text())
                     player_stats['minutes_of_play'] = sfloat(year.findAll('td')[6].get_text())
+
+                    player_stats['p3_league_attack_ratio'] = round(LeagueStats.p3_league_attack_ratio, 3)
+                    player_stats['p2_league_attack_ratio'] = round(LeagueStats.p2_league_attack_ratio, 3)
+                    player_stats['ft_league_attack_ratio'] = round(LeagueStats.ft_league_attack_ratio, 3)
                     
                     try:
                         team_url = "https://www.basketball-reference.com" + year.find('td', {'data-stat': 'team_id'}).find('a')['href']
@@ -103,12 +107,10 @@ def get_player_year_stats(table, selected_year):
                         player_stats['team_p2_ratio'] = LeagueStats.p2_league_ratio
                         player_stats['team_ft_ratio'] = LeagueStats.ft_league_ratio    
                         player_stats['p3_team_attack_ratio'] = LeagueStats.p3_league_attack_ratio
-                        player_stats['p2_team_attack_ratio'] = LeagueStats.p2_league_attack_ratio 
+                        player_stats['p2_team_attack_ratio'] = LeagueStats.p2_league_attack_ratio
 
                 except IndexError:
                     player_stats['error'] = "IndexError"
-                
-                break
 
     return player_stats
 
