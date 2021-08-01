@@ -188,8 +188,8 @@ $(document).ready(function () {
       3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) + 
       2 * p2_league_attack_ratio * (p2_league_ratio + 0.06) + 
       2 * ft_league_ratio * ft_league_attack_ratio - 
-      block_chance * (3 * p3_league_attack_ratio + 
-      2 * p2_league_attack_ratio) - 
+      block_chance * (3 * p3_league_attack_ratio * p3_league_ratio + 
+      2 * p2_league_attack_ratio * p2_league_ratio) - 
       tov_chance * (3 * p3_league_attack_ratio + 
       2 * p2_league_attack_ratio + 2 * ft_league_attack_ratio);
     assist_val =
@@ -199,14 +199,16 @@ $(document).ready(function () {
       3 * p3_league_attack_ratio * p3_league_ratio + 
       2 * p2_league_attack_ratio * p2_league_ratio + 
       2 * ft_league_ratio * ft_league_attack_ratio - 
-      block_chance * (3 * p3_league_attack_ratio + 2 * p2_league_attack_ratio) - 
+      block_chance * (3 * p3_league_attack_ratio * p3_league_ratio
+         + 2 * p2_league_attack_ratio * p2_league_ratio) - 
       tov_chance * (3 * p3_league_attack_ratio + 
         2 * p2_league_attack_ratio + 2 * ft_league_attack_ratio);
     off_rebound_val =
       3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) + 
       2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) + 
       2 * ft_league_ratio * ft_league_attack_ratio - 
-      block_chance * (3 * p3_league_attack_ratio + 2 * p2_league_attack_ratio) - 
+      block_chance * (3 * p3_league_attack_ratio * p3_league_ratio
+         + 2 * p2_league_attack_ratio * p2_league_ratio) - 
       tov_chance * (3 * p3_league_attack_ratio + 2 * p2_league_attack_ratio + 2 * ft_league_attack_ratio);
     block_val = 0.57 * d_rebound_val;
     turnover_val = steal_val;

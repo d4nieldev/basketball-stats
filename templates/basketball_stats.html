@@ -151,20 +151,22 @@
             
             
             <div class="input-group">
-                <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בקבוצה %OT3P</div>
-                <input id="p3_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.24" required>
+                <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בקבוצה %OT3P (רק מתוך חצי מרחק ושלשות)</div>
+                <input id="p3_team_attack_ratio" class="form-control" type="number" step="0.001" required>
+            </div>
+            <div class="input-group">
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בליגה %OL3P</div>
                 <input id="p3_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
-                <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בקבוצה %OT2P</div>
-                <input id="p2_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.6" required>
+                <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בקבוצה %OT2P (רק מתוך חצי מרחק ושלשות)</div>
+                <input id="p2_team_attack_ratio" class="form-control" type="number" step="0.001" required>
+            </div>
+            <div class="input-group">
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בליגה %OL2P</div>
                 <input id="p2_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
             <div class="input-group">
-                <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בקבוצה %OTFT</div>
-                <input id="ft_team_attack_ratio" class="form-control" type="number" step="0.001" value="0.16" required>
                 <div class="input-group-text">אחוז זריקות העונשין בהתקפה ממוצעת בליגה %OLFT</div>
                 <input id="ft_league_attack_ratio" class="form-control" type="number" step="0.001" required>
             </div>
@@ -176,31 +178,21 @@
                     <h2>הנוסחאות</h2>
                 </div>
                 <div class="text-center" dir="ltr">
-                    <div class="row pb-3">
-                        <div class="col-1 my-auto fw-bold">TOTAL =</div>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-12">3 x 3P x 3P% <b>+</b> 2 x 2P x 2P%  <b>+</b> 1 x FT x FT%  <b>+</b> <b>AST VALUE</b> x AST  <b>+</b> <b>DRB VALUE</b> x DRB  <b>+</b> <b>ORB VALUE</b> x ORB  <b>+</b> <b>STL VALUE</b> x STL <b>+</b> <b>BLK VALUE</b> x BLK  <b>-</b> <b>TOV VALUE</b> x TOV <b>-</b> (3 x 3PO x 3PO%  <b>+</b> 2 x 2PO x 2PO%  <b>+</b> 1 x FTO x FTO%)</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 border-bottom border-1 border-dark"></div>
-                            </div>
-                            <div class="row"><div class="col-12">MP</div></div>
-                        </div>
+                    <b>TOTAL</b> = 3 x 3P x 3P% <b>+</b> 2 x P2 x P2% <b>+</b> 1 x FT x FT% <b>+</b> <b>AST VALUE</b> x AST <b>+</b> <b>DRB VALUE</b> x DRB <b>+</b> <b>ORB VALUE</b> x ORB <b>+</b> <b>STL VALUE</b> x STL <b>+</b> <b>BLK VALUE</b> x BLK <b>-</b> <b>TOV VALUE</b> x (TOV / AST) <b>-</b> (3 x 3PO x 3PO% <b>+</b> 2 x 2PO x 2PO% <b>+</b> 1 x FTO x FTO%)
                     </div>
                     
                     <div class="border border-2 border-dark mb-3 text-start p-2">
                         <b>AST VALUE</b> = 3 x OT3P% x (1 - T3P%) <b>+</b> 2 x OT2P% x (1 - T2P%)
                         <br>
-                        <b>DRB VALUE</b> = 3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT%
+                        <b>DRB VALUE</b> = 3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
                         <br>
-                        <b>ORB VALUE</b> = 3 x OL3P% x (L3P% + 0.01) <b>+</b> 2 x OL2P% x (L2P% + 0.03) <b>+</b> 2 x OLFT% x LFT%
+                        <b>ORB VALUE</b> = 3 x OL3P% x (L3P% + 0.01) <b>+</b> 2 x OL2P% x (L2P% + 0.03) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
                         <br>
-                        <b>STL VALUE</b> = 3 x OL3P% x (L3P% + 0.02) <b>+</b> 2 x OL2P% x (L2P% + 0.06) <b>+</b> 2 x OLFT% x LFT%
+                        <b>STL VALUE</b> = 3 x OL3P% x (L3P% + 0.02) <b>+</b> 2 x OL2P% x (L2P% + 0.06) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
                         <br>
-                        <b>BLK VALUE</b> = <span title="The chance the ball stays in my team control after the block">0.57</span> x (3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT%)
+                        <b>BLK VALUE</b> = <span title="The chance the ball stays in my team control after the block">0.57</span> x (3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%))
                         <br>
-                        <b>TOV VALUE</b> = 3 x OL3P% x 0.4 <b>+</b> 2 x OL2P% x 0.7 <b>+</b> 2 x OLFT% x LFT%
+                        <b>TOV VALUE</b> = 3 x OL3P% x (L3P% + 0.02) <b>+</b> 2 x OL2P% x (L2P% + 0.06) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
                         <br>
                         
                         <div class="row">
@@ -242,7 +234,7 @@
                     </div>
 
                     <ul class="text-end" style="font-family: Tahoma; font-size: 0.8rem;" dir="rtl">
-                        <li>רק שנה עם לפחות 12 משחקי פלייאוף (מינימום משחקים כדי לקחת אליפות) נחשבת כדי שיהיה ממוצע מדויק.</li>
+                        <li>רק שנה עם לפחות 12 משחקי פלייאוף נחשבת כדי שיהיה ממוצע מדויק.</li>
                         <li>האתר בוחר את השנה הכי טובה לפי הניקוד של הנוסחה באותה השנה (יעילות).</li>
                         <li>האתר מכניס לחישוב רק את השנים 1979-80 ומעלה כי לפני שנים אלו השלשה לא הייתה קיימת.</li>
                         <li>כל שנה ב 1.8 נתוני השנה הטובה ביותר יתעדכנו אוטומטית.</li>
