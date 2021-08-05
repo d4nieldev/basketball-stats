@@ -9,19 +9,33 @@ class LeagueStats:
     """
     average tov per game = 15
     average blocks per game = 5
+    average stl per game = 8 (of tov)
     average p3 attempts = 34
     average p2 attempts = 54
     average ft attempts = 11
     """
     p3_league_attack_ratio = 34 / 119 # OL3P%
-    p2_league_attack_ratio = 54 / 119
-    ft_league_attack_ratio = 11 / 119
-    p3_league_ratio = 0.37
-    p2_league_ratio = 0.5
-    ft_league_ratio = 0.78
+    p2_league_attack_ratio = 54 / 119 # OL2P%
+    ft_league_attack_ratio = 11 / 119 # OLFT%
+    p3_league_ratio = 0.37 # L3P%
+    p2_league_ratio = 0.5 # L2P%
+    ft_league_ratio = 0.78 # LFT%
 
-    block_chance = 5 / 119 # OLBLK%
-    tov_chance = 0 # OLTOV%
+    avg_blocks = 5
+    avg_turnovers = 15
+    avg_steals = 7.8
+    avg_p3a = 34
+    avg_p2a = 54
+    avg_fta = 11
+    total = avg_blocks + avg_turnovers + avg_p3a + avg_p2a + avg_fta
+
+    block_chance = avg_blocks / total # BLKC%
+    tov_chance = avg_turnovers / total # TOVC%
+    stl_chance = avg_steals / total # STLC%
+
+PROBLEMATIC_PLAYERS = {
+    'westbru01': {'drb': -3.5}
+}
 
 def sfloat(string):
     if string == '':
@@ -43,7 +57,6 @@ def get_player_year_stats(table, selected_year):
 
                     player_stats['p2_in'] = sfloat(year.findAll('td')[13].get_text())
                     player_stats['p2_attempts'] = sfloat(year.findAll('td')[14].get_text())
-
                     player_stats['ft_in'] = sfloat(year.findAll('td')[17].get_text())
                     player_stats['ft_attempts'] = sfloat(year.findAll('td')[18].get_text())
 
@@ -116,8 +129,6 @@ def get_player_year_stats(table, selected_year):
 
 def calc_rating(player_stats):
     if not 'error' in player_stats:
-        pos = player_stats['pos']
-
         p3_in = player_stats['p3_in']
         p3_attempts = player_stats['p3_attempts']
         try:
@@ -166,38 +177,48 @@ def calc_rating(player_stats):
         steals = player_stats['steals']
         blocks = player_stats['blocks']
         turnovers = player_stats['turnovers']
-        minutes_of_play = player_stats['minutes_of_play']
+
         p3_team_ratio = player_stats['team_p3_ratio']
         p2_team_ratio = player_stats['team_p2_ratio']
         ft_team_ratio = player_stats['team_ft_ratio']
 
         p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
-        p3_team_attack_ratio = player_stats['p3_team_attack_ratio']
         p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
-        p2_team_attack_ratio = player_stats['p2_team_attack_ratio']
         ft_league_attack_ratio = LeagueStats.ft_league_attack_ratio
+
         p3_league_ratio = LeagueStats.p3_league_ratio
         p2_league_ratio = LeagueStats.p2_league_ratio
         ft_league_ratio = LeagueStats.ft_league_ratio
 
+        p3_team_attack_ratio = player_stats['p3_team_attack_ratio']
+        p2_team_attack_ratio = player_stats['p2_team_attack_ratio']
 
-        steal_val =  3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.06) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * p2_league_ratio) - LeagueStats.tov_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio + 2 * LeagueStats.ft_league_attack_ratio)
-        turnover_val = steal_val
+        z1 = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.06) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * p2_league_ratio)
+        z2 = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.018) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.056) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * p2_league_ratio)
+
+        tov_value = (z2 - LeagueStats.stl_chance * z1) / (1 + LeagueStats.tov_chance * LeagueStats.stl_chance)
+        stl_value = z1 - LeagueStats.tov_chance * tov_value
         assist_val = 3 * p3_team_attack_ratio * (1 - p3_team_ratio) + 2 * p2_team_attack_ratio * (1 - p2_team_ratio)
-        d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio + 2 * LeagueStats.ft_league_attack_ratio)
-        off_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * (3 * LeagueStats.p3_league_attack_ratio + 2 * LeagueStats.p2_league_attack_ratio + 2 * LeagueStats.ft_league_attack_ratio)
+        d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * tov_value
+        off_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * tov_value
         block_val = 0.57 * d_rebound_val
 
-        total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * (turnovers / assists) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
 
-        
-        """
-        After averages are ready
-        if pos == 'PG':
-            total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers * (total_tov_avg / total_tov_pg_avg) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
-        else:
-            total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + steal_val * steals + block_val * blocks - turnover_val * turnovers - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
-        """
+        if assists <= 0.5:
+            assists = 0.5
+
+        total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks - tov_value * (turnovers / assists) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+
+        print(f"""
+        ----------------------------------------------
+        {tov_value=}
+        {stl_value=}
+        {assist_val=}
+        {d_rebound_val=}
+        {off_rebound_val=}
+        {block_val=}
+        ----------------------------------------------
+        """)
 
         return total
     return 0

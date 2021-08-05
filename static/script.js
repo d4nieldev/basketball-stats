@@ -124,39 +124,21 @@ $(document).ready(function () {
 
     p3_in = parseFloat($("#p3_in").val());
     p3_attempts = parseFloat($("#p3_attempts").val());
-    p3_ratio = p3_in / p3_attempts;
-    if (!Number.isFinite(p3_ratio)) p3_ratio = 0;
-    $("#p3_ratio").html("3P% = " + p3_ratio);
 
     p2_in = parseFloat($("#p2_in").val());
     p2_attempts = parseFloat($("#p2_attempts").val());
-    p2_ratio = p2_in / p2_attempts;
-    if (!Number.isFinite(p2_ratio)) p2_ratio = 0;
-    $("#p2_ratio").html("2P% = " + p2_ratio);
 
     ft_in = parseFloat($("#ft_in").val());
     ft_attempts = parseFloat($("#ft_attempts").val());
-    ft_ratio = ft_in / ft_attempts;
-    if (!Number.isFinite(ft_ratio)) ft_ratio = 0;
-    $("#ft_ratio").html("FT% = " + ft_ratio);
 
     p3_on_me = parseFloat($("#p3_on_me").val());
     p3_attempts_on_me = parseFloat($("#p3_attempts_on_me").val());
-    p3_ratio_on_me = p3_on_me / p3_attempts_on_me;
-    if (!Number.isFinite(p3_ratio_on_me)) p3_ratio_on_me = 0;
-    $("#p3_ratio_on_me").html("3PO% = " + p3_ratio_on_me);
 
     p2_on_me = parseFloat($("#p2_on_me").val());
     p2_attempts_on_me = parseFloat($("#p2_attempts_on_me").val());
-    p2_ratio_on_me = p2_on_me / p2_attempts_on_me;
-    if (!Number.isFinite(p2_ratio_on_me)) p2_ratio_on_me = 0;
-    $("#p2_ratio_on_me").html("2PO% = " + p2_ratio_on_me);
 
     ft_on_me = parseFloat($("#ft_on_me").val());
     ft_attempts_on_me = parseFloat($("#ft_attempts_on_me").val());
-    ft_ratio_on_me = ft_on_me / ft_attempts_on_me;
-    if (!Number.isFinite(ft_ratio_on_me)) ft_ratio_on_me = 0;
-    $("#ft_ratio_on_me").html("FTO% = " + ft_ratio_on_me);
 
     assists = parseFloat($("#assists").val());
     d_rebounds = parseFloat($("#d_rebounds").val());
@@ -164,6 +146,7 @@ $(document).ready(function () {
     steals = parseFloat($("#steals").val());
     blocks = parseFloat($("#blocks").val());
     turnovers = parseFloat($("#turnovers").val());
+    mp = parseFloat($("#minutes_of_play").val());
 
     p3_team_ratio = parseFloat($("#p3_team_ratio").val());
     p2_team_ratio = parseFloat($("#p2_team_ratio").val());
@@ -173,78 +156,52 @@ $(document).ready(function () {
     p2_team_attack_ratio = parseFloat($("#p2_team_attack_ratio").val());
     ft_team_attack_ratio = parseFloat($("#ft_team_attack_ratio").val());
 
-    p3_league_ratio = parseFloat($("#p3_league_ratio").val());
-    p2_league_ratio = parseFloat($("#p2_league_ratio").val());
-    ft_league_ratio = parseFloat($("#ft_league_ratio").val());
-
-    p3_league_attack_ratio = parseFloat($("#p3_league_attack_ratio").val());
-    p2_league_attack_ratio = parseFloat($("#p2_league_attack_ratio").val());
-    ft_league_attack_ratio = parseFloat($("#ft_league_attack_ratio").val());
-
-    block_chance = 5 / 119
-    tov_chance = 15 / 119
-
-    steal_val = 
-      3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) + 
-      2 * p2_league_attack_ratio * (p2_league_ratio + 0.06) + 
-      2 * ft_league_ratio * ft_league_attack_ratio - 
-      block_chance * (3 * p3_league_attack_ratio * p3_league_ratio + 
-      2 * p2_league_attack_ratio * p2_league_ratio) - 
-      tov_chance * (3 * p3_league_attack_ratio + 
-      2 * p2_league_attack_ratio + 2 * ft_league_attack_ratio);
-    assist_val =
-      3 * p3_team_attack_ratio * (1 - p3_team_ratio) + 
-      2 * p2_team_attack_ratio * (1 - p2_team_ratio);
-    d_rebound_val =
-      3 * p3_league_attack_ratio * p3_league_ratio + 
-      2 * p2_league_attack_ratio * p2_league_ratio + 
-      2 * ft_league_ratio * ft_league_attack_ratio - 
-      block_chance * (3 * p3_league_attack_ratio * p3_league_ratio
-         + 2 * p2_league_attack_ratio * p2_league_ratio) - 
-      tov_chance * (3 * p3_league_attack_ratio + 
-        2 * p2_league_attack_ratio + 2 * ft_league_attack_ratio);
-    off_rebound_val =
-      3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) + 
-      2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) + 
-      2 * ft_league_ratio * ft_league_attack_ratio - 
-      block_chance * (3 * p3_league_attack_ratio * p3_league_ratio
-         + 2 * p2_league_attack_ratio * p2_league_ratio) - 
-      tov_chance * (3 * p3_league_attack_ratio + 2 * p2_league_attack_ratio + 2 * ft_league_attack_ratio);
-    block_val = 0.57 * d_rebound_val;
-    turnover_val = steal_val;
-
-    console.log('assist_val: ' + assist_val);
-    console.log('d_rebound_val: ' + d_rebound_val);
-    console.log('off_rebound_val: ' + off_rebound_val);
-    console.log('steal_val: ' + steal_val);
-    console.log('block_val: ' + block_val);
-    console.log('turnover_val: ' + turnover_val);
-    console.log('-----------------------------------------------')
-
-    total =
-      3 * p3_in * p3_ratio +
-      2 * p2_in * p2_ratio +
-      1 * ft_in * ft_ratio +
-      assist_val * assists +
-      d_rebound_val * d_rebounds +
-      off_rebound_val * off_rebound +
-      steal_val * steals +
-      block_val * blocks -
-      turnover_val * turnovers -
-      (3 * p3_on_me * p3_ratio_on_me +
-        2 * p2_on_me * p2_ratio_on_me +
-        1 * ft_on_me * ft_ratio_on_me);
-
-    total = total.toFixed(3);
-    $("#total").html("ניקוד שחקן: " + total);
-    
-    $(".player-total").removeClass("d-none");
-    $("html, body").animate(
-      {
-        scrollTop: 0,
+    $.ajax({
+      method: "POST",
+      url: '/apply_formula',
+      data:{
+        p3_in: p3_in,
+        p3_attempts: p3_attempts,
+        p2_in: p2_in,
+        p2_attempts: p2_attempts,
+        ft_in: ft_in,
+        ft_attempts: ft_attempts,
+        p3_on_me: p3_on_me,
+        p3_attempts_on_me: p3_attempts,
+        p2_on_me: p2_on_me,
+        p2_attempts_on_me: p2_attempts,
+        ft_on_me: ft_on_me,
+        ft_attempts_on_me: ft_attempts,
+        assists: assists,
+        d_rebounds: d_rebounds,
+        off_rebound: off_rebound,
+        steals: steals,
+        blocks: blocks,
+        turnovers: turnovers,
+        mp: mp,
+        team_p3_ratio: p3_team_ratio,
+        team_p2_ratio: p2_team_ratio,
+        team_ft_ratio: ft_team_ratio,
+        p3_team_attack_ratio: p3_team_attack_ratio,
+        p2_team_attack_ratio: p2_team_attack_ratio,
+        ft_team_attack_ratio: ft_team_attack_ratio,
       },
-      300
-    );
+      success: function(response){
+        total = response.rating
+        total = total.toFixed(3);
+        $("#total").html("ניקוד שחקן: " + total);
+        
+        $(".player-total").removeClass("d-none");
+        $("html, body").animate(
+          {
+            scrollTop: 0,
+          },
+          300
+        );
+      }
+    })
+
+    
   });
 
   $("#selectBestYear").on("click", function () {

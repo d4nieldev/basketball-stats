@@ -90,4 +90,16 @@ def get_best_year():
     return jsonify({'best_year': best_year})
 
 
+@app.route('/apply_formula', methods=['POST', 'GET'])
+def apply_formula():
+    values = request.form.to_dict()
+
+    for key, val in values.items():
+        values[key] = 0 if val == 'NaN' else float(val)
+    
+    rating = calc_rating(values)
+    return jsonify({'rating': rating})
+
+
+
 

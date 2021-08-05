@@ -82,7 +82,7 @@ def get_player_info(player_row):
             if row.find('th') and row.find('th').find('a'):
                 if int(row.findAll('td')[4].get_text()) > MINIMUM_GAMES_FOR_PLAYOFFS and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
                     if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF']:
-                        if sfloat(row.findAll('td')[10].get_text()) <= 0:
+                        if sfloat(row.findAll('td')[10].get_text()) > 0:
                             years_playoffs.add(row.find('th').find('a').get_text())
                     else:
                         years_playoffs.add(row.find('th').find('a').get_text())
