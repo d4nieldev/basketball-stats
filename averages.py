@@ -8,6 +8,8 @@ from tqdm import tqdm
 
 
 def get_stats(link):
+    print(link)
+
     url = f'https://www.basketball-reference.com/players/{link[0]}/{link}'
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
@@ -58,8 +60,8 @@ def get_stats(link):
             for key in d:
                 d[key] = sum(d[key]) / d(tovs[key])
                 d['total'] += d[key]
-        
-        data = {
+
+        return {
             'hgt': height,
             'wgt': weight,
             'bmi': weight / ((height / 100) ** 2),
@@ -69,9 +71,6 @@ def get_stats(link):
             'drb': drbs,
             'orb': orbs
         }
-        print(data)
-
-        return data
 
 
 def avg_lst(lst):
@@ -92,8 +91,9 @@ for player in players_data:
     if player is not None:
         links.append(player['link'])
 
-with concurrent.futures.ThreadPoolExecutor() as executor:
-    players_stats = list(executor.map(get_stats, links))
+players_stats = []
+for link in links:
+    players_stats.append(get_stats(link))
 
 tovs = {
     'PG': [],
@@ -125,11 +125,16 @@ for stat in players_stats:
     # for each player
     for pos in ['PG', 'SG', 'SF', 'PF', 'C']:
         # copy values from each player to the matching position in the total dict
-        tovs[pos].append(stat['tov'][pos])
-        drbs[pos].append(stat['drb'][pos])
-        orbs[pos].append(stat['orb'][pos])
-        p3pcs[pos].append(stat['p3pc'][pos])
-        p3s[pos].append(stat['p3'][pos])
+        if stat['tov'][pos] is not None:
+            tovs[pos].append(stat['tov'][pos])
+        if stat['drb'][pos] is not None:
+            drbs[pos].append(stat['drb'][pos])
+        if stat['orb'][pos] is not None:
+            orbs[pos].append(stat['orb'][pos])
+        if stat['p3pc'][pos] is not None:
+            p3pcs[pos].append(stat['p3pc'][pos])
+        if stat['p3'][pos] is not None:
+            p3s[pos].append(stat['p3'][pos])
     
     # add player average to height key in heights in orbs 
     if stat['height'] in orbs['heights'].keys():
