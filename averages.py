@@ -20,125 +20,129 @@ def get_stats(link):
     except AttributeError:
         # don't count this year
         return
-    else:
-        # retreive height and weight
-        desc = soup.find('div', {"itemtype": "https://schema.org/Person"}).findAll('p')
-        height = 0
-        weight = 0
-        for line in desc:
-            txt = line.get_text().strip()
-            try:
-                hgt = int(re.findall("([0-9]+)cm", txt)[0])
-                wgt = int(re.findall("([0-9]+)kg", txt)[0])
 
-                # if height and weight were found than assign them and stop searching
-                height = hgt
-                weight = wgt
-                break
-            except IndexError:
-                # didn't find height and weight for this line
-                pass
+    # retreive height and weight
+    desc = soup.find('div', {"itemtype": "https://schema.org/Person"}).findAll('p')
+    height = 0
+    weight = 0
+    for line in desc:
+        txt = line.get_text().strip()
+        try:
+            hgt = int(re.findall("([0-9]+)cm", txt)[0])
+            wgt = int(re.findall("([0-9]+)kg", txt)[0])
+
+            # if height and weight were found than assign them and stop searching
+            height = hgt
+            weight = wgt
+            break
+        except IndexError:
+            # didn't find height and weight for this line
+            pass
+            
+    if height == 0 or weight == 0:
+        # if no height or weight found, skip this year
+        return
+    
+    tovs = {
+        'PG': [],
+        'SG': [],
+        'SF': [],
+        'PF': [],
+        'C': [],
+        'total': []
+    }
+    drbs = {
+        'PG': [],
+        'SG': [],
+        'SF': [],
+        'PF': [],
+        'C': [],
+        'total': []
+    }
+    orbs = {
+        'PG': [],
+        'SG': [],
+        'SF': [],
+        'PF': [],
+        'C': [],
+        'total': []
+    }
+    p3s = {
+        'PG': [],
+        'SG': [],
+        'SF': [],
+        'PF': [],
+        'C': [],
+        'total': []
+    }
+    p3pcs = {
+        'PG': [],
+        'SG': [],
+        'SF': [],
+        'PF': [],
+        'C': [],
+        'total': []
+    }
+
+    for row in tqdm(per_game, desc=link, leave=True):
+        # only players from year grater than 1990 who player more than 10 minutes
+        if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1990:
+            if sfloat(row.find('td', {'data-stat': 'mp_per_g'}).get_text()) >= 10:
+                # sometimes POS is shown like: SF, PG. So grab them all
+                pos = [item for item in row.find('td', {'data-stat': 'pos'}).get_text().split(',')]
+                for p in pos:
+                    # add relevant data to corresponding dict in relevant position
+                    tovs[p].append(sfloat(row.find('td', {'data-stat': 'tov_per_g'}).get_text()))
+                    drbs[p].append(sfloat(row.find('td', {'data-stat': 'drb_per_g'}).get_text()))
+                    orbs[p].append(sfloat(row.find('td', {'data-stat': 'orb_per_g'}).get_text()))
                 
+                # anyway, append data to the total of all positions
+                tovs['total'].append(sfloat(row.find('td', {'data-stat': 'tov_per_g'}).get_text()))
+                drbs['total'].append(sfloat(row.find('td', {'data-stat': 'drb_per_g'}).get_text()))
+                orbs['total'].append(sfloat(row.find('td', {'data-stat': 'orb_per_g'}).get_text()))
 
-        if height == 0 or weight == 0:
-            # if no height or weight found, skip this year
-            return
-        
-        tovs = {
-            'PG': [],
-            'SG': [],
-            'SF': [],
-            'PF': [],
-            'C': [],
-            'total': []
-        }
-        drbs = {
-            'PG': [],
-            'SG': [],
-            'SF': [],
-            'PF': [],
-            'C': [],
-            'total': []
-        }
-        orbs = {
-            'PG': [],
-            'SG': [],
-            'SF': [],
-            'PF': [],
-            'C': [],
-            'total': []
-        }
-        p3s = {
-            'PG': [],
-            'SG': [],
-            'SF': [],
-            'PF': [],
-            'C': [],
-            'total': []
-        }
-        p3pcs = {
-            'PG': [],
-            'SG': [],
-            'SF': [],
-            'PF': [],
-            'C': [],
-            'total': []
-        }
+                # for only players from year 2020, do the above for 3P
+                if int(row.find('th').find('a').get_text().split('-')[0]) == 2020:
+                    p3 = sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text())
+                    p3pc = sfloat(row.find('td', {'data-stat': 'fg3_pct'}).get_text())
 
-        for row in tqdm(per_game, desc=link, leave=True):
-            if row.find('th') and row.find('th').find('a'):
-                if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1990:
-                    if sfloat(row.find('td', {'data-stat': 'mp_per_g'}).get_text()) >= 10:
-                        pos = [item for item in row.find('td', {'data-stat': 'pos'}).get_text().split(',')]
-                        for p in pos:
-                            tovs[p].append(sfloat(row.find('td', {'data-stat': 'tov_per_g'}).get_text()))
-                            drbs[p].append(sfloat(row.find('td', {'data-stat': 'drb_per_g'}).get_text()))
-                            orbs[p].append(sfloat(row.find('td', {'data-stat': 'orb_per_g'}).get_text()))
-                        
-                        tovs['total'].append(sfloat(row.find('td', {'data-stat': 'tov_per_g'}).get_text()))
-                        drbs['total'].append(sfloat(row.find('td', {'data-stat': 'drb_per_g'}).get_text()))
-                        orbs['total'].append(sfloat(row.find('td', {'data-stat': 'orb_per_g'}).get_text()))
+                    for p in pos:
+                        p3s[p].append(p3)
+                        p3pcs[p].append(p3pc)
 
-                        if int(row.find('th').find('a').get_text().split('-')[0]) == 2020:
-                            p3 = sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text())
-                            p3pc = sfloat(row.find('td', {'data-stat': 'fg3_pct'}).get_text())
+                    p3pcs['total'].append(p3pc)
+                    p3s['total'].append(p3)
 
-                            for p in pos:
-                                p3s[p].append(p3)
-                                p3pcs[p].append(p3pc)
-
-                            p3pcs['total'].append(p3pc)
-                            p3s['total'].append(p3)
-
-        data_list = [tovs, drbs, orbs, p3s, p3pcs]
-        
-        for i in range(len(data_list)):
-            keys_to_pop = []
-            for key, val in data_list[i].items():
-                if val == []:
-                    keys_to_pop.append(key)
-            for k in keys_to_pop:
-                if k == 'total':
-                    data_list[i]['total'] = 0
-                data_list[i].pop(k)
-
-        for i in range(len(data_list)):
-            for key, val in data_list[i].items():
-                avg = avg_lst(val)
-                data_list[i][key] = avg
-            if 'total' not in data_list[i]:
+    data_list = [tovs, drbs, orbs, p3s, p3pcs]
+    
+    for i in range(len(data_list)):
+        # for each dict, pop the irrelevant positions beside the total
+        keys_to_pop = []
+        for key, val in data_list[i].items():
+            if val == []:
+                keys_to_pop.append(key)
+        for k in keys_to_pop:
+            if k == 'total':
                 data_list[i]['total'] = 0
+            data_list[i].pop(k)
 
-        return {
-            'hgt': height,
-            'wgt': weight,
-            'bmi': weight / ((height / 100) ** 2),
-            'p3pc': p3pcs,
-            'p3': p3s,
-            'tov': tovs,
-            'drb': drbs,
-            'orb': orbs
-        }
+    for i in range(len(data_list)):
+        # set the average for each key in each dict
+        for key, val in data_list[i].items():
+            avg = avg_lst(val)
+            data_list[i][key] = avg
+        if 'total' not in data_list[i]:
+            data_list[i]['total'] = 0
+
+    return {
+        'hgt': height,
+        'bmi': weight / ((height / 100) ** 2),
+        'p3pc': p3pcs,
+        'p3': p3s,
+        'tov': tovs,
+        'drb': drbs,
+        'orb': orbs
+    }
 
 
 def avg_lst(lst):
@@ -148,6 +152,7 @@ def avg_lst(lst):
     return sum(lst) / len(lst)
 
 
+# get the links
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 json_url = os.path.join(SITE_ROOT, "static/data", "players.json")
 players_data = json.load(open(json_url))
@@ -157,11 +162,15 @@ for player in players_data:
     if player is not None:
         links.append(player['link'])
 
+################# FOR TESTING #####################
 # players_stats = []
 # for player in links:
 #     print(player)
 #     players_stats.append(get_stats(player))
 #     break
+################# FOR TESTING #####################
+
+# fetch all data from all players to one big dict
 with concurrent.futures.ThreadPoolExecutor() as executor:
     players_stats = list(executor.map(get_stats, links))
 
@@ -265,14 +274,12 @@ for d in [tovs, drbs, orbs, p3s, p3pcs]:
         if idx < 5:
             # for positions
             avg = avg_lst(val)
-            d[key] = None
             d[key] = avg
         else:
-            # for height or bmi
+            # for height, bmi, or both
             for height, avgs in val.items():
                 # for each height, average the averages
                 avg = avg_lst(avgs)
-                val[height] = None
                 val[height] = avg
 
 
