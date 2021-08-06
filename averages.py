@@ -6,6 +6,7 @@ import os
 from utils import sfloat
 from tqdm import tqdm
 import re
+import pprint
 
 
 def get_stats(link):
@@ -138,6 +139,9 @@ for player in players_data:
 
 with concurrent.futures.ThreadPoolExecutor() as executor:
     players_stats = list(executor.map(get_stats, links))
+
+print('-----------------------------------------')
+pprint(players_stats)
 
 tovs = {
     'PG': [],
