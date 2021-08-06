@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='basketball.png') }}"
+    <link rel="icon" href="{{ url_for('static', filename='basketball.png') }}">
     <title>חישוב סטטיסטיקה</title>
 </head>
 <body style="direction: rtl;">
@@ -178,21 +178,21 @@
                     <h2>הנוסחאות</h2>
                 </div>
                 <div class="text-center" dir="ltr">
-                    <b>TOTAL</b> = 3 x 3P x 3P% <b>+</b> 2 x P2 x P2% <b>+</b> 1 x FT x FT% <b>+</b> <b>AST VALUE</b> x AST <b>+</b> <b>DRB VALUE</b> x DRB <b>+</b> <b>ORB VALUE</b> x ORB <b>+</b> <b>STL VALUE</b> x STL <b>+</b> <b>BLK VALUE</b> x BLK <b>-</b> <b>TOV VALUE</b> x (TOV / AST) <b>-</b> (3 x 3PO x 3PO% <b>+</b> 2 x 2PO x 2PO% <b>+</b> 1 x FTO x FTO%)
+                    <b>TOTAL</b> = 3 x 3P x 3P% <b>+</b> 2 x 2P x 2P% <b>+</b> 1 x FT x FT% <b>+</b> <b>AST VALUE</b> x AST <b>+</b> <b>DRB VALUE</b> x DRB <b>+</b> <b>ORB VALUE</b> x ORB <b>+</b> <b>STL VALUE</b> x STL <b>+</b> <b>BLK VALUE</b> x BLK <b>-</b> <b>TOV VALUE</b> x (TOV / AST x STOV%) <b>-</b> (3 x 3PO x 3PO% <b>+</b> 2 x 2PO x 2PO% <b>+</b> 1 x FTO x FTO%)
                     </div>
                     
                     <div class="border border-2 border-dark mb-3 text-start p-2">
                         <b>AST VALUE</b> = 3 x OT3P% x (1 - T3P%) <b>+</b> 2 x OT2P% x (1 - T2P%)
                         <br>
-                        <b>DRB VALUE</b> = 3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
+                        <b>DRB VALUE</b> = 3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%) <b>-</b> CTOV% x <b>TOV_VALUE</b>
                         <br>
-                        <b>ORB VALUE</b> = 3 x OL3P% x (L3P% + 0.01) <b>+</b> 2 x OL2P% x (L2P% + 0.03) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
+                        <b>ORB VALUE</b> = 3 x OL3P% x (L3P% + 0.01) <b>+</b> 2 x OL2P% x (L2P% + 0.03) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%) <b>-</b> CTOV% x <b>TOV_VALUE</b>
                         <br>
-                        <b>STL VALUE</b> = 3 x OL3P% x (L3P% + 0.02) <b>+</b> 2 x OL2P% x (L2P% + 0.06) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
+                        <b>STL VALUE</b> = 3 x OL3P% x (L3P% + 0.02) <b>+</b> 2 x OL2P% x (L2P% + 0.06) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%) <b>-</b> CTOV% x <b>TOV_VALUE</b>
                         <br>
-                        <b>BLK VALUE</b> = <span title="The chance the ball stays in my team control after the block">0.57</span> x (3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%))
+                        <b>BLK VALUE</b> = <span title="The chance the ball stays in my team control after the block">0.57</span> x (3 x OL3P% x L3P% <b>+</b> 2 x OL2P% x L2P% <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%) <b>-</b> CTOV% x <b>TOV_VALUE</b>)
                         <br>
-                        <b>TOV VALUE</b> = 3 x OL3P% x (L3P% + 0.02) <b>+</b> 2 x OL2P% x (L2P% + 0.06) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%)
+                        <b>TOV VALUE</b> = 3 x OL3P% x (L3P% + 0.015) <b>+</b> 2 x OL2P% x (L2P% + 0.05) <b>+</b> 2 x OLFT% x LFT% <b>-</b> CBLK% x (3 x OL3P% x L3P% + 2 x OL2P% x L2P%) <b>-</b> CSTL% x <b>STL_VALUE</b>
                         <br>
                         
                         <div class="row">
