@@ -21,6 +21,15 @@ class LeagueStats:
     p2_league_ratio = 0.5 # L2P%
     ft_league_ratio = 0.78 # LFT%
 
+    stl_p3 = 0.02
+    stl_p2 = 0.06
+
+    tov_p3 = 0.015
+    tov_p2 = 0.05
+
+    orb_p3 = 0.01
+    orb_p2 = 0.03
+
     avg_blocks = 5
     avg_turnovers = 15
     avg_steals = 7.8
@@ -33,7 +42,10 @@ class LeagueStats:
     tov_chance = avg_turnovers / total # TOVC%
     stl_chance = avg_steals / total # STLC%
 
-    dumb_turnovers = (avg_turnovers - avg_steals) / avg_turnovers
+    stl_turnovers = avg_steals / avg_turnovers
+
+    shooters_multiplier = 2
+    good_shooter_minimum = 0.41
 
 PROBLEMATIC_PLAYERS = {
     'westbru01': {'drb': -3.5}
@@ -195,14 +207,17 @@ def calc_rating(player_stats):
         p3_team_attack_ratio = player_stats['p3_team_attack_ratio']
         p2_team_attack_ratio = player_stats['p2_team_attack_ratio']
 
-        z1 = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.02) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.06) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * p2_league_ratio)
-        z2 = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.015) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.05) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * p2_league_ratio)
+        if p3_ratio >= LeagueStats.good_shooter_minimum:
+            p3_ratio = LeagueStats.shooters_multiplier * p3_ratio
+
+        z1 = 3 * p3_league_attack_ratio * (p3_league_ratio + LeagueStats.stl_p3) + 2 * p2_league_attack_ratio * (p2_league_ratio + LeagueStats.stl_p2) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * p2_league_ratio)
+        z2 = 3 * p3_league_attack_ratio * (p3_league_ratio + LeagueStats.tov_p3) + 2 * p2_league_attack_ratio * (p2_league_ratio + LeagueStats.tov_p2) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * p2_league_ratio)
 
         tov_value = (z2 - LeagueStats.stl_chance * z1) / (1 + LeagueStats.tov_chance * LeagueStats.stl_chance)
         stl_value = z1 - LeagueStats.tov_chance * tov_value
         assist_val = 3 * p3_team_attack_ratio * (1 - p3_team_ratio) + 2 * p2_team_attack_ratio * (1 - p2_team_ratio)
         d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * tov_value
-        off_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio + 0.01) + 2 * p2_league_attack_ratio * (p2_league_ratio + 0.03) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * tov_value
+        off_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio + LeagueStats.orb_p3) + 2 * p2_league_attack_ratio * (p2_league_ratio + LeagueStats.orb_p2) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * tov_value
         block_val = 0.57 * d_rebound_val
 
 

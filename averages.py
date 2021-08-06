@@ -10,8 +10,6 @@ import pprint
 
 
 def get_stats(link):
-    print(link)
-
     url = f'https://www.basketball-reference.com/players/{link[0]}/{link}.html'
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
@@ -25,13 +23,28 @@ def get_stats(link):
     else:
         # retreive height and weight
         desc = soup.find('div', {"itemtype": "https://schema.org/Person"}).findAll('p')
+        height = 0
+        weight = 0
         for line in desc:
             txt = line.get_text().strip()
-            hgt_re = re.search("[0-9]+cm", txt)
-            wgt_re = re.search("[0-9]+kg", txt)
-            if hgt_re and wgt_re:
-                height = int(hgt_re.group(0)[:2])
-                weight = int(wgt_re.group(0)[:2])
+            try:
+                hgt = int(re.findall("([0-9]+)cm", txt)[0])
+                wgt = int(re.findall("([0-9]+)kg", txt)[1])
+
+                # if height and weight were found than assign them and stop searching
+                height = hgt
+                weight = wgt
+                break
+            except IndexError:
+                # didn't find height and weight for this line
+                pass
+                
+
+        if height == 0 or weight == 0:
+            # if no height or weight found, skip this year
+            return
+        
+
         
         tovs = {
             'PG': [],
@@ -74,7 +87,7 @@ def get_stats(link):
             'total': []
         }
 
-        for row in tqdm(per_game):
+        for row in tqdm(per_game, desc=link, leave=True):
             if row.find('th') and row.find('th').find('a'):
                 if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1990:
                     pos = [item for item in row.find('td', {'data-stat': 'pos'}).get_text().split(',')]
@@ -99,10 +112,16 @@ def get_stats(link):
                         p3s['total'].append(p3)
 
         data_list = [tovs, drbs, orbs, p3s, p3pcs]
+        
         for i in range(len(data_list)):
+            keys_to_pop = []
             for key, val in data_list[i].items():
                 if val == []:
-                    data_list[i][key] = [0]
+                    keys_to_pop.append(key)
+            for k in keys_to_pop:
+                if k == 'total':
+                    data_list[i]['total'] = 0
+                data_list[i].pop(k)
 
         for i in range(len(data_list)):
             for key, val in data_list[i].items():
@@ -123,7 +142,7 @@ def get_stats(link):
 
 def avg_lst(lst):
     if len(lst) == 0:
-        return 0
+        return None
 
     return sum(lst) / len(lst)
 
@@ -137,11 +156,12 @@ for player in players_data:
     if player is not None:
         links.append(player['link'])
 
+# players_stats = []
+# for player in links:
+#     players_stats.append(get_stats(player))
+#     break
 with concurrent.futures.ThreadPoolExecutor() as executor:
     players_stats = list(executor.map(get_stats, links))
-
-print('-----------------------------------------')
-pprint(players_stats)
 
 tovs = {
     'PG': [],
@@ -185,18 +205,19 @@ p3s = {
 
 for stat in players_stats:
     # for each player
-    for pos in ['PG', 'SG', 'SF', 'PF', 'C']:
-        # copy values from each player to the matching position in the total dict
-        if stat['tov'][pos] is not None:
-            tovs[pos].append(stat['tov'][pos])
-        if stat['drb'][pos] is not None:
-            drbs[pos].append(stat['drb'][pos])
-        if stat['orb'][pos] is not None:
-            orbs[pos].append(stat['orb'][pos])
-        if stat['p3pc'][pos] is not None:
-            p3pcs[pos].append(stat['p3pc'][pos])
-        if stat['p3'][pos] is not None:
-            p3s[pos].append(stat['p3'][pos])
+    if stat:
+        for pos in ['PG', 'SG', 'SF', 'PF', 'C']:
+            # copy values from each player to the matching position in the total dict
+            if pos in stat['tov']:
+                tovs[pos].append(stat['tov'][pos])
+            if pos in stat['drb']:
+                drbs[pos].append(stat['drb'][pos])
+            if pos in stat['orb']:
+                orbs[pos].append(stat['orb'][pos])
+            if pos in stat['p3pc']:
+                p3pcs[pos].append(stat['p3pc'][pos])
+            if pos in stat['p3']:
+                p3s[pos].append(stat['p3'][pos])
     
     # add player average to height key in heights in orbs 
     if stat['hgt'] in orbs['heights'].keys():
@@ -211,7 +232,7 @@ for stat in players_stats:
         drbs['heights'][stat['hgt']] = [stat['drb']['total']]
 
     # add player average to bmi key in bmis in p3s
-    if stat['bmi'] in p3s['bmis'].keys():
+    if stat['bmi'] in p3s['bmis']:
         p3s['bmis'][stat['bmi']].append(stat['p3']['total'])
     else:
         p3s['bmis'][stat['bmi']] = [stat['p3']['total']]
