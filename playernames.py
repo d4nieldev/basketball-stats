@@ -6,6 +6,7 @@ from utils import calc_rating, get_player_year_stats, sfloat
 from tqdm import tqdm
 import concurrent.futures
 from time import perf_counter
+import os
 
 MINIMUM_GAMES_FOR_PLAYOFFS = 12
 
@@ -80,9 +81,8 @@ def get_player_info(player_row):
     else:
         for row in player_rows_playoffs:
             if row.find('th') and row.find('th').find('a'):
-                if int(row.findAll('td')[4].get_text()) >= MINIMUM_GAMES_FOR_PLAYOFFS and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
-                    if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF']:
-                        if sfloat(row.findAll('td')[10].get_text()) > 0:
+                if int(row.find('td', {'data-stat': 'g'}).get_text()) >= MINIMUM_GAMES_FOR_PLAYOFFS and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
+                    if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF'] and sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text()) > 0:
                             years_playoffs.add(row.find('th').find('a').get_text())
                     else:
                         years_playoffs.add(row.find('th').find('a').get_text())

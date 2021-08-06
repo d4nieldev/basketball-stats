@@ -47,6 +47,8 @@ class LeagueStats:
     shooters_multiplier = 2
     good_shooter_minimum = 0.41
 
+    ast_min_val = 0.5
+
 PROBLEMATIC_PLAYERS = {
     'westbru01': {'drb': -3.5}
 }
@@ -66,13 +68,14 @@ def get_player_year_stats(table, selected_year):
                 try:
                     player_stats['pos'] = str(year.find('td', {'data-stat': 'pos'}).get_text())
 
-                    player_stats['p3_in'] = sfloat(year.findAll('td')[10].get_text())
-                    player_stats['p3_attempts'] = sfloat(year.findAll('td')[11].get_text())
+                    player_stats['p3_in'] = sfloat(year.find('td', {'data-stat': 'fg3_per_g'}).get_text())
+                    player_stats['p3_attempts'] = sfloat(year.find('td', {'data-stat': 'fg3a_per_g'}).get_text())
 
-                    player_stats['p2_in'] = sfloat(year.findAll('td')[13].get_text())
-                    player_stats['p2_attempts'] = sfloat(year.findAll('td')[14].get_text())
-                    player_stats['ft_in'] = sfloat(year.findAll('td')[17].get_text())
-                    player_stats['ft_attempts'] = sfloat(year.findAll('td')[18].get_text())
+                    player_stats['p2_in'] = sfloat(year.find('td', {'data-stat': 'fg2_per_g'}).get_text())
+                    player_stats['p2_attempts'] = sfloat(year.find('td', {'data-stat': 'fg2a_per_g'}).get_text())
+
+                    player_stats['ft_in'] = sfloat(year.find('td', {'data-stat': 'ft_per_g'}).get_text())
+                    player_stats['ft_attempts'] = sfloat(year.find('td', {'data-stat': 'fta_per_g'}).get_text())
 
                     player_stats['p3_on_me'] = 0
                     player_stats['p3_attempts_on_me'] = 0
@@ -83,13 +86,13 @@ def get_player_year_stats(table, selected_year):
                     player_stats['ft_on_me'] = 0
                     player_stats['ft_attempts_on_me'] = 0
 
-                    player_stats['assists'] = sfloat(year.findAll('td')[23].get_text())
-                    player_stats['d_rebounds'] = sfloat(year.findAll('td')[21].get_text())
-                    player_stats['off_rebound'] = sfloat(year.findAll('td')[20].get_text())
-                    player_stats['steals'] = sfloat(year.findAll('td')[24].get_text())
-                    player_stats['blocks'] = sfloat(year.findAll('td')[25].get_text())
-                    player_stats['turnovers'] = sfloat(year.findAll('td')[26].get_text())
-                    player_stats['minutes_of_play'] = sfloat(year.findAll('td')[6].get_text())
+                    player_stats['assists'] = sfloat(year.find('td', {'data-stat': 'ast_per_g'}).get_text())
+                    player_stats['d_rebounds'] = sfloat(year.find('td', {'data-stat': 'drb_per_g'}).get_text())
+                    player_stats['off_rebound'] = sfloat(year.find('td', {'data-stat': 'orb_per_g'}).get_text())
+                    player_stats['steals'] = sfloat(year.find('td', {'data-stat': 'stl_per_g'}).get_text())
+                    player_stats['blocks'] = sfloat(year.find('td', {'data-stat': 'blk_per_g'}).get_text())
+                    player_stats['turnovers'] = sfloat(year.find('td', {'data-stat': 'tov_per_g'}).get_text())
+                    player_stats['minutes_of_play'] = sfloat(year.find('td', {'data-stat': 'mp_per_g'}).get_text())
 
                     player_stats['p3_league_attack_ratio'] = round(LeagueStats.p3_league_attack_ratio, 3)
                     player_stats['p2_league_attack_ratio'] = round(LeagueStats.p2_league_attack_ratio, 3)
@@ -104,22 +107,22 @@ def get_player_year_stats(table, selected_year):
                         team_stats_soup = BeautifulSoup(comments[34], 'html.parser')
                         team_stats = team_stats_soup.find('table').find('tbody').find('tr')
 
-                        team_3p = sfloat(team_stats.findAll('td')[5].get_text())
-                        team_3pa = sfloat(team_stats.findAll('td')[6].get_text())
+                        team_3p = sfloat(team_stats.find('td', {'data-stat': 'fg3'}).get_text())
+                        team_3pa = sfloat(team_stats.find('td', {'data-stat': 'fg3a'}).get_text())
                         try:
                             player_stats['team_p3_ratio'] = round(team_3p / team_3pa, 3)
                         except ZeroDivisionError:
                             player_stats['team_p3_ratio'] = LeagueStats.p3_league_ratio
 
-                        team_2p = sfloat(team_stats.findAll('td')[8].get_text())
-                        team_2pa = sfloat(team_stats.findAll('td')[9].get_text())
+                        team_2p = sfloat(team_stats.find('td', {'data-stat': 'fg2'}).get_text())
+                        team_2pa = sfloat(team_stats.find('td', {'data-stat': 'fg2a'}).get_text())
                         try:
                             player_stats['team_p2_ratio'] = round(team_2p / team_2pa, 3)
                         except ZeroDivisionError:
                             player_stats['team_p2_ratio'] = LeagueStats.p2_league_ratio
 
-                        team_ft = sfloat(team_stats.findAll('td')[11].get_text())
-                        team_fta = sfloat(team_stats.findAll('td')[12].get_text())
+                        team_ft = sfloat(team_stats.find('td', {'data-stat': 'ft'}).get_text())
+                        team_fta = sfloat(team_stats.find('td', {'data-stat': 'fta'}).get_text())
                         try:
                             player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
                         except ZeroDivisionError:
@@ -221,21 +224,10 @@ def calc_rating(player_stats):
         block_val = 0.57 * d_rebound_val
 
 
-        if assists <= 0.5:
-            assists = 0.5
-        # 0.48 dumb
-        total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * (turnovers / (LeagueStats.dumb_turnovers * assists)) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+        if assists <= LeagueStats.ast_min_val:
+            assists = LeagueStats.ast_min_val
 
-        print(f"""
-        ----------------------------------------------
-        {tov_value=}
-        {stl_value=}
-        {assist_val=}
-        {d_rebound_val=}
-        {off_rebound_val=}
-        {block_val=}
-        ----------------------------------------------
-        """)
+        total = 3 * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * (turnovers / (LeagueStats.stl_turnovers * assists)) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
 
         return total
     return 0
