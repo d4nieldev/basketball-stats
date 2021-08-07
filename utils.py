@@ -42,7 +42,7 @@ class LeagueStats:
     tov_chance = avg_turnovers / total # TOVC%
     stl_chance = avg_steals / total # STLC%
 
-    stl_turnovers = avg_steals / avg_turnovers
+    stl_turnovers = avg_steals / avg_turnovers # STOV%
 
     good_shooter_minimum_3p = 1.1
     good_shooter_minimum_ratio = 0.41
