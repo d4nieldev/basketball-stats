@@ -9,6 +9,12 @@ import re
 import pprint
 
 
+def floor_to_half(num):
+    temp = 0
+    while temp <= num - 0.5:
+        temp += 0.5
+    return temp
+
 def get_stats(link):
     url = f'https://www.basketball-reference.com/players/{link[0]}/{link}.html'
     content = requests.get(url).content
@@ -85,9 +91,9 @@ def get_stats(link):
     }
 
     for row in tqdm(per_game, desc=link, leave=True):
-        # only players from year grater than 1990 who player more than 10 minutes
+        # only players from year grater than 1990 who player more than 8 minutes
         if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1990:
-            if sfloat(row.find('td', {'data-stat': 'mp_per_g'}).get_text()) >= 10:
+            if sfloat(row.find('td', {'data-stat': 'mp_per_g'}).get_text()) >= 8:
                 # sometimes POS is shown like: SF, PG. So grab them all
                 pos = [item for item in row.find('td', {'data-stat': 'pos'}).get_text().split(',')]
                 for p in pos:
@@ -136,7 +142,7 @@ def get_stats(link):
 
     return {
         'hgt': height,
-        'bmi': weight / ((height / 100) ** 2),
+        'bmi':  floor_to_half(weight / ((height / 100) ** 2)),
         'p3pc': p3pcs,
         'p3': p3s,
         'tov': tovs,

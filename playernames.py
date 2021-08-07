@@ -70,8 +70,14 @@ def get_player_info(player_row):
     else:
         years_season = set()
         for row in player_rows_season:
-            if row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
-                years_season.add(row.find('th').find('a').get_text())
+            if row.find('th') and row.find('th').find('a'):
+                if sfloat(row.find('td', {'data-stat': 'g'}).get_text()) >= MINIMUM_GAMES_FOR_PLAYOFFS and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
+                    if sfloat(row.find('td', {'data-stat': 'mp_per_g'}).get_text()) >= 8:
+                        if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF']:
+                            if sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text()) > 0:
+                                years_season.add(row.find('th').find('a').get_text())
+                        else:
+                            years_season.add(row.find('th').find('a').get_text())
     
     try:
         player_rows_playoffs = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
@@ -82,7 +88,8 @@ def get_player_info(player_row):
         for row in player_rows_playoffs:
             if row.find('th') and row.find('th').find('a'):
                 if int(row.find('td', {'data-stat': 'g'}).get_text()) >= MINIMUM_GAMES_FOR_PLAYOFFS and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
-                    if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF'] and sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text()) > 0:
+                    if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF']:
+                        if sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text()) > 0:
                             years_playoffs.add(row.find('th').find('a').get_text())
                     else:
                         years_playoffs.add(row.find('th').find('a').get_text())
