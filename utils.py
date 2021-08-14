@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from bs4 import Comment
 from flask import Flask, json, jsonify, request
 import json
+import re
 
 class LeagueStats:
     """
@@ -44,8 +45,8 @@ class LeagueStats:
 
     stl_turnovers = avg_steals / avg_turnovers # STOV%
 
-    good_shooter_minimum_3p = 1.5
-    good_shooter_minimum_ratio = 0.405
+    good_shooter_minimum_3p = 2
+    good_shooter_minimum_ratio = 0.401
     good_shooter_3p_multiplier = 3.5
 
     ast_min_val = 0.5
@@ -95,6 +96,8 @@ def get_player_year_stats(table, selected_year):
                     player_stats['turnovers'] = sfloat(year.find('td', {'data-stat': 'tov_per_g'}).get_text())
                     player_stats['minutes_of_play'] = sfloat(year.find('td', {'data-stat': 'mp_per_g'}).get_text())
 
+                    player_stats['games'] = sfloat(year.find('td', {'data-stat': 'g'}).get_text())
+
                     player_stats['p3_league_attack_ratio'] = round(LeagueStats.p3_league_attack_ratio, 3)
                     player_stats['p2_league_attack_ratio'] = round(LeagueStats.p2_league_attack_ratio, 3)
                     player_stats['ft_league_attack_ratio'] = round(LeagueStats.ft_league_attack_ratio, 3)
@@ -103,6 +106,14 @@ def get_player_year_stats(table, selected_year):
                         team_url = "https://www.basketball-reference.com" + year.find('td', {'data-stat': 'team_id'}).find('a')['href']
                         team_content = requests.get(team_url).content
                         team_soup = BeautifulSoup(team_content, 'html.parser')
+
+                        team_winrate = 0
+                        team_general_stats = team_soup.find("div", {"data-template": "Partials/Teams/Summary"}).findAll('p')
+                        for stat in team_general_stats:
+                            if stat.find("strong").get_text() == 'Record:':
+                                record = re.findall("[0-9]+-[0-9]", stat.get_text())[0]
+                                team_winrate = int(record.split('-')[0]) / int(record.split('-')[0]) + int(record.split('-')[1])
+                        player_stats['team_winrate'] = team_winrate
 
                         comments = team_soup.find_all(string=lambda text: isinstance(text, Comment))
                         team_stats_soup = BeautifulSoup(comments[34], 'html.parser')
@@ -253,7 +264,7 @@ def get_top_100():
             
             for player in data:
                 if player is not None:
-                    if player['rating_season'] > best_rating_season and f"{player['name']}({player['best_year_season']})" not in best_players_season:
+                    if player['rating_season_top100'] > best_rating_season and f"{player['name']}({player['best_year_season']})" not in best_players_season:
                         best_rating_season = player['rating_season']
                         best_name_season = f"{player['name']}({player['best_year_season']})"
                     if player['rating_playoffs'] > best_rating_playoffs and f"{player['name']}({player['best_year_playoffs']})" not in best_players_playoffs:

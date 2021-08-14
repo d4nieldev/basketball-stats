@@ -8,30 +8,42 @@ import concurrent.futures
 from time import perf_counter
 import os
 
-MINIMUM_GAMES = 12
-MINIMUM_GAMES_TOP100 = 40
+MINIMUM_GAMES_PLAYOFFS = 12
+MINIMUM_GAMES_SEASON = 40
 MINIMUM_WINRATE_TOP100 = 0.48
 
 
 def get_best_year(soup, years_season, years_playoffs):
     name = soup.find('h1', {'itemprop': 'name'}).find('span').get_text()
     rating_season = 0
+    rating_season_top100 = 0
     rating_playoffs = 0
     index = 0
 
     try:
         best_year_season = years_season[0]
+        beat_year_season_top100 = years_season[0]
     except IndexError:
         best_year_season = -1
+        beat_year_season_top100 = -1
     else:
         player_years_season = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
         for year in tqdm(years_season, desc=f"{name} - Season [{years_season[index]}]", leave=False):
             if int(year.split('-')[0]) >= 1979:
-                temp_season = calc_rating(get_player_year_stats(player_years_season, year))
+                year_stats = get_player_year_stats(player_years_season, year)
+                temp_season = calc_rating(year_stats)
+
+                if year_stats['team_winrate'] >= MINIMUM_WINRATE_TOP100:
+                    temp_season_top100 = temp_season
 
                 if temp_season > rating_season:
                     rating_season = temp_season
                     best_year_season = years_season[index]
+                
+                if temp_season_top100 > rating_season_top100:
+                    rating_season_top100 = temp_season_top100
+                    beat_year_season_top100 = years_season[index]
+
             index += 1
     
     index = 0
@@ -43,7 +55,7 @@ def get_best_year(soup, years_season, years_playoffs):
     else:
         player_years_playoffs = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
         for year in tqdm(years_playoffs, desc=f"{name} - Playoffs [{years_playoffs[index]}]", leave=False):
-            if int(year.split('-')[0]) >= 1979 and sfloat(soup.find("table", {'id': 'playoffs_per_game'}).find('a', string=year).find_parent('tr').findAll('td')[4].get_text()) >= MINIMUM_GAMES:
+            if int(year.split('-')[0]) >= 1979:
                 temp_playoffs = calc_rating(get_player_year_stats(player_years_playoffs, year))
 
                 if temp_playoffs > rating_playoffs:
@@ -51,7 +63,7 @@ def get_best_year(soup, years_season, years_playoffs):
                     best_year_playoffs = years_playoffs[index]
             index += 1
     
-    return best_year_season, best_year_playoffs, rating_season, rating_playoffs
+    return best_year_season, best_year_playoffs, beat_year_season_top100, rating_season, rating_playoffs, rating_season_top100
 
 
 def get_player_info(player_row):
@@ -73,16 +85,14 @@ def get_player_info(player_row):
         years_season = set()
         for row in player_rows_season:
             if row.find('th') and row.find('th').find('a'):
-                if sfloat(row.find('td', {'data-stat': 'g'}).get_text()) >= MINIMUM_GAMES and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
+                if sfloat(row.find('td', {'data-stat': 'g'}).get_text()) >= MINIMUM_GAMES_SEASON and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
                     if sfloat(row.find('td', {'data-stat': 'mp_per_g'}).get_text()) >= 8:
                         if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF']:
                             if sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text()) > 0:
                                 years_season.add(row.find('th').find('a').get_text())
                         else:
                             years_season.add(row.find('th').find('a').get_text())
-                        
-
-    
+                    
     try:
         player_rows_playoffs = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
         years_playoffs = set()
@@ -91,7 +101,7 @@ def get_player_info(player_row):
     else:
         for row in player_rows_playoffs:
             if row.find('th') and row.find('th').find('a'):
-                if int(row.find('td', {'data-stat': 'g'}).get_text()) >= MINIMUM_GAMES and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
+                if int(row.find('td', {'data-stat': 'g'}).get_text()) >= MINIMUM_GAMES_PLAYOFFS and row.find('th') and row.find('th').find('a') and int(row.find('th').find('a').get_text().split('-')[0]) >= 1979:
                     if str(row.find('td', {'data-stat': 'pos'}).get_text()) in ['PG', 'SG', 'SF']:
                         if sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text()) > 0:
                             years_playoffs.add(row.find('th').find('a').get_text())
@@ -112,8 +122,10 @@ def get_player_info(player_row):
         'years_playoffs': sorted(years_playoffs),
         'best_year_season': best_years[0],
         'best_year_playoffs': best_years[1],
-        'rating_season': best_years[2],
-        'rating_playoffs': best_years[3]
+        'best_year_season_top100': best_years[2],
+        'rating_season': best_years[3],
+        'rating_playoffs': best_years[4],
+        'rating_season_top100': best_years[5]
     }
 
 
