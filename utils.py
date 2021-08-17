@@ -19,7 +19,7 @@ class LeagueStats:
     p2_league_attack_ratio = 54 / 119 # OL2P%
     ft_league_attack_ratio = 11 / 119 # OLFT%
     p3_league_ratio = 0.37 # L3P%
-    p2_league_ratio = 0.5 # L2P%
+    p2_league_ratio = 0.52 # L2P%
     ft_league_ratio = 0.78 # LFT%
 
     stl_p3 = 0.02
