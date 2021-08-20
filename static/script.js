@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $("#top100>tbody>tr>th[data-name='True']").each(function(){
     original_text = $(this).text()
-    original_element = $(this)
+    var $this = $(this)
 
     player = $(this).text().split('(')[0]
     player = player.substring(0, player.length - 1)
@@ -14,7 +14,7 @@ $(document).ready(function () {
       success: function(response){
         if (response != "ERR") {
           full_link = "https://www.basketball-reference.com/players/" + response[0] + "/" + response + ".html"
-          original_element.html("<a href='" + full_link + "'>" + original_text + "</a>")
+          $this.find("a").attr("href", full_link)
         }
         else{
           console.log(player)

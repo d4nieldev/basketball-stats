@@ -268,9 +268,9 @@
                             {% for i in range(100) %}
                             <tr>
                                 <th scope="row">{{ i + 1 }}</th>
-                                <th data-name="True">{{ top100playoffs_keys[i] }}</th>
+                                <th data-name="True"><a href="">{{ top100playoffs_keys[i] }}</a></th>
                                 <td style="border-left: 1px solid black">{{ top100playoffs_items[i] }}</td>
-                                <th data-name="True">{{ top100season_keys[i] }}</th>
+                                <th data-name="True"><a href="">{{ top100season_keys[i] }}</a></th>
                                 <td>{{ top100season_items[i] }}</td>
                             </tr>
                             {% endfor %}
