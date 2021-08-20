@@ -101,5 +101,15 @@ def apply_formula():
     return jsonify({'rating': rating})
 
 
+@app.route('/get_link_from_name', methods=['POST', 'GET'])
+def get_link_from_name():
+    player_name = request.form.to_dict()['player_name']
 
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    json_url = os.path.join(SITE_ROOT, "static/data", "players.json")
+    players_data = json.load(open(json_url))
 
+    for player in players_data:
+        if player is not None and player['name'] == player_name:
+            return jsonify(player['link'])
+    return jsonify("ERR")
