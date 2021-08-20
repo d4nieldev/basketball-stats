@@ -67,6 +67,11 @@ def player_stats():
 
 @app.route('/get_player_years', methods=['POST', 'GET'])
 def get_player_years():
+    """Finds a player by link and returning his years options depending on if the user selected playoff or season
+
+    Returns:
+        list: a list of years
+    """
     link = request.values['link']
     is_playoff = bool(request.values['playoffs'] == 'Playoffs')
 
