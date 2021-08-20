@@ -234,9 +234,8 @@ $(document).ready(function () {
         playoffs: $("#selectPlayoffs").val()
       },
       success: function (response) {
-        best_year = response.best_year;
-        if (best_year != -1) { 
-          $("#selectedYear").val(best_year);
+        if (response != -1) { 
+          $("#selectedYear").val(response);
           $("#selectedYear").trigger("change");
         }
       },

@@ -91,6 +91,11 @@ def get_player_years():
 
 @app.route('/get_best_year', methods=['POST', 'GET'])
 def get_best_year():
+    """When the user clicks the "Get best year" button - checks for the player best year depending on the user selection - playoff or season
+
+    Returns:
+        str: best year for selected game mode
+    """
     link = request.values['link']
     is_playoff = bool(request.values['playoffs'] == 'Playoffs')
 
@@ -107,7 +112,7 @@ def get_best_year():
                 break
     
 
-    return jsonify({'best_year': best_year})
+    return jsonify(best_year)
 
 
 @app.route('/apply_formula', methods=['POST', 'GET'])
