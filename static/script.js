@@ -69,11 +69,8 @@ $(document).ready(function () {
           $("#steals").val(response.steals);
           $("#blocks").val(response.blocks);
           $("#turnovers").val(response.turnovers);
-          $("#minutes_of_play").val(response.minutes_of_play);
 
-          $("#p3_team_ratio").val(response.team_p3_ratio);
           $("#p2_team_ratio").val(response.team_p2_ratio);
-          $("#ft_team_ratio").val(response.team_ft_ratio);
 
           $("#p3_league_attack_from_assist_ratio").val(response.p3_league_attack_from_assist_ratio);
           $("#p2_league_attack_from_assist_ratio").val(response.p2_league_attack_from_assist_ratio);
@@ -146,11 +143,8 @@ $(document).ready(function () {
     steals = parseFloat($("#steals").val());
     blocks = parseFloat($("#blocks").val());
     turnovers = parseFloat($("#turnovers").val());
-    mp = parseFloat($("#minutes_of_play").val());
 
-    p3_team_ratio = parseFloat($("#p3_team_ratio").val());
     p2_team_ratio = parseFloat($("#p2_team_ratio").val());
-    ft_team_ratio = parseFloat($("#ft_team_ratio").val());
 
     p3_league_attack_from_assist_ratio = parseFloat($("#p3_league_attack_from_assist_ratio").val());
     p2_league_attack_from_assist_ratio = parseFloat($("#p2_league_attack_from_assist_ratio").val());
@@ -178,10 +172,7 @@ $(document).ready(function () {
         steals: steals,
         blocks: blocks,
         turnovers: turnovers,
-        mp: mp,
-        team_p3_ratio: p3_team_ratio,
         team_p2_ratio: p2_team_ratio,
-        team_ft_ratio: ft_team_ratio,
         p3_league_attack_from_assist_ratio: p3_league_attack_from_assist_ratio,
         p2_league_attack_from_assist_ratio: p2_league_attack_from_assist_ratio,
         ft_team_attack_ratio: ft_team_attack_ratio,
