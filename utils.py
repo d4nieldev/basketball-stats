@@ -54,11 +54,42 @@ class LeagueStats:
     p3_league_attack_from_assist_ratio = 0.39
     p2_league_attack_from_assist_ratio = 0.61
 
+
+
 def sfloat(string):
     if string == '':
         return 0
     else:
         return float(string)
+
+
+def get_top_100(data):
+    best_players_season = {}
+    best_players_playoffs = {}
+
+    for _ in range(100):
+        best_rating_season = 0
+        best_name_season = ''
+        
+        best_rating_playoffs = 0
+        best_name_playoffs = ''
+        
+        for player in data:
+            if player is not None:
+                # player needs to be the best of the unchecked
+                if player['rating_season_top100'] > best_rating_season and f"{player['name']} ({player['best_year_season_top100']})" not in best_players_season:
+                    # on season, count only the best year that can be top100!
+                    best_rating_season = player['rating_season_top100']
+                    best_name_season = f"{player['name']} ({player['best_year_season_top100']})"
+                if player['rating_playoffs'] > best_rating_playoffs and f"{player['name']} ({player['best_year_playoffs']})" not in best_players_playoffs:
+                    best_rating_playoffs = player['rating_playoffs']
+                    best_name_playoffs = f"{player['name']} ({player['best_year_playoffs']})"
+        
+        best_players_season[best_name_season] = round(best_rating_season, 5)
+        best_players_playoffs[best_name_playoffs] = round(best_rating_playoffs, 5)
+    
+    return best_players_season, best_players_playoffs
+
 
 def get_player_year_stats(table, selected_year):
     player_stats = {}
@@ -235,39 +266,3 @@ def calc_rating(player_stats):
 
         return total
     return 0
-
-def get_top_100():
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "static/data", "players.json")
-
-    with open(json_url, 'r') as f:
-        data = json.load(f)
-
-        best_players_season = {}
-        best_players_playoffs = {}
-
-        for _ in range(100):
-            best_rating_season = 0
-            best_name_season = ''
-            
-            best_rating_playoffs = 0
-            best_name_playoffs = ''
-            
-            for player in data:
-                if player is not None:
-                    if player['rating_season_top100'] > best_rating_season and f"{player['name']} ({player['best_year_season_top100']})" not in best_players_season:
-                        best_rating_season = player['rating_season_top100']
-                        best_name_season = f"{player['name']} ({player['best_year_season_top100']})"
-                    if player['rating_playoffs'] > best_rating_playoffs and f"{player['name']} ({player['best_year_playoffs']})" not in best_players_playoffs:
-                        best_rating_playoffs = player['rating_playoffs']
-                        best_name_playoffs = f"{player['name']} ({player['best_year_playoffs']})"
-            
-            best_players_season[best_name_season] = round(best_rating_season, 5)
-            best_players_playoffs[best_name_playoffs] = round(best_rating_playoffs, 5)
-        
-        return best_players_season, best_players_playoffs
-            
-
-            
-            
-            

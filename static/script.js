@@ -1,11 +1,12 @@
 $(document).ready(function () {
-  $("table>tbody>tr>th[data-name='True'],table>tbody>tr>td[data-name='True']").each(function(){
+  $("table>tbody>tr>th[data-name='True'], table>tbody>tr>td[data-name='True']").each(function(){
     player = $(this).text()
     var $this = $(this)
     if (~player.indexOf('(')){
       player = $(this).text().split('(')[0]
       player = player.substring(0, player.length - 1)
     }
+    
     $.ajax({
       url: '/get_link_from_name',
       method: 'POST',
