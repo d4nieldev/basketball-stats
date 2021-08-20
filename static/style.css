@@ -74,3 +74,6 @@
   list-style-type:decimal;
   text-align: start;
 }
+.separate-row th{
+  background-color: rgb(165, 165, 165);
+}
