@@ -241,7 +241,7 @@
                         <li>השנה הכי טובה של שחקן יכולה להיות רק עונה שהשחקן שיחק בה 40 משחקים לפחות ולקבוצה היה יחס נצחונות של 48% ומעלה (רק עונה רגילה)</li>
                     </ul>
 
-                    <table class="table" dir="rtl" style="font-family: Tahoma;">
+                    <table id="top100" class="table" dir="rtl" style="font-family: Tahoma;">
                         <thead>
                             <th colspan="1"></th>
                             <th colspan="2" style="border-left: 1px solid black">פלייאוף</colgroup>
@@ -258,9 +258,9 @@
                             {% for i in range(100) %}
                             <tr>
                                 <th scope="row">{{ i + 1 }}</th>
-                                <th data-name="True"><a href="">{{ top100playoffs_keys[i] }}</a></th>
+                                <th data-name="True"><a class="link-dark text-decoration-none" target="blank" href="">{{ top100playoffs_keys[i] }}</a></th>
                                 <td style="border-left: 1px solid black">{{ top100playoffs_items[i] }}</td>
-                                <th data-name="True"><a href="">{{ top100season_keys[i] }}</a></th>
+                                <th data-name="True"><a class="link-dark text-decoration-none" target="blank" href="">{{ top100season_keys[i] }}</a></th>
                                 <td>{{ top100season_items[i] }}</td>
                             </tr>
                             {% endfor %}
