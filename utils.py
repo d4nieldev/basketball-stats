@@ -45,7 +45,7 @@ class LeagueStats:
 
     stl_turnovers = avg_steals / avg_turnovers # STOV%
 
-    good_shooter_minimum_3p = 2
+    good_shooter_minimum_3p = 1.3
     good_shooter_minimum_ratio = 0.401
     good_shooter_3p_multiplier = 3.3
 
