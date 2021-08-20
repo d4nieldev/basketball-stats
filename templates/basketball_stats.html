@@ -10,11 +10,11 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='basketball.png') }}">
-    <title>חישוב סטטיסטיקה שגוי</title>
+    <title>Stats Without Shooting %</title>
 </head>
 <body style="direction: rtl;">
     <div class="container">
-        <h1 class="text-center">חישוב סטטיסטיקה כדורסל שגוי</h1>     
+        <h1 class="text-center">Stats Without Shooting %</h1>     
         <form id="getPlayerStats" method="GET">
             <div class="input-group">
                 <input list="nbaPlayers" id="selectedPlayer" class="form-control" placeholder="-- בחירת שחקן --" required>
@@ -152,7 +152,7 @@
             
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת של הליגה מאסיסט %AL3P (רק מתוך חצי מרחק ושלשות)</div>
-                <input id="p3_league_attack_from_assist_ratio" class="form-control" type="number" step="0.001" value="0.4" required>
+                <input id="p3_league_attack_from_assist_ratio" class="form-control" type="number" step="0.001" value="0.39" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות השלשות בהתקפה ממוצעת בליגה %OL3P</div>
@@ -160,7 +160,7 @@
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת של הליגה מאסיסט %AL2P (רק מתוך חצי מרחק ושלשות)</div>
-                <input id="p2_league_attack_from_assist_ratio" class="form-control" type="number" step="0.001" value="0.6" required>
+                <input id="p2_league_attack_from_assist_ratio" class="form-control" type="number" step="0.001" value="0.61" required>
             </div>
             <div class="input-group">
                 <div class="input-group-text">אחוז זריקות החצי מרחק בהתקפה ממוצעת בליגה %OL2P</div>
@@ -241,7 +241,7 @@
                     </div>
 
                     <ul class="text-end" style="font-family: Tahoma; font-size: 0.8rem;" dir="rtl">
-                        <li>התוצאה של הנוסחה היא הנקודות שהשחקן קלע וגם הנקודות שגרם לקבוצה שלו ב 100% קליעה</li>
+                        <li>התוצאה של הנוסחה היא הנקודות שהשחקן קלע וגם הנקודות שגרם לקבוצה שלו לקלוע.</li>
                         <li>שחקנים שקלעו מעל 40.1% מהשלשות וזרקו בממוצע 2 שלשות ומעלה בכל משחק השלשות שלהם מוכפלות ב 3.3 במקום ב 3</li>
                         <li>רק שנה עם לפחות 12 משחקי פלייאוף נחשבת כדי שיהיה ממוצע מדויק.</li>
                         <li>האתר בוחר את השנה הכי טובה לפי הניקוד של הנוסחה באותה השנה (יעילות).</li>
