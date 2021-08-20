@@ -260,9 +260,9 @@ def get_top_100():
             
             for player in data:
                 if player is not None:
-                    if player['rating_season_top100'] > best_rating_season and f"{player['name']} ({player['best_year_season']})" not in best_players_season:
-                        best_rating_season = player['rating_season']
-                        best_name_season = f"{player['name']} ({player['best_year_season']})"
+                    if player['rating_season_top100'] > best_rating_season and f"{player['name']} ({player['best_year_season_top100']})" not in best_players_season:
+                        best_rating_season = player['rating_season_top100']
+                        best_name_season = f"{player['name']} ({player['best_year_season_top100']})"
                     if player['rating_playoffs'] > best_rating_playoffs and f"{player['name']} ({player['best_year_playoffs']})" not in best_players_playoffs:
                         best_rating_playoffs = player['rating_playoffs']
                         best_name_playoffs = f"{player['name']} ({player['best_year_playoffs']})"
