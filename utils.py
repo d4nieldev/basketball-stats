@@ -107,8 +107,8 @@ def get_player_year_stats(table, selected_year):
                         team_general_stats = team_soup.find("div", {"data-template": "Partials/Teams/Summary"}).findAll('p')
                         for stat in team_general_stats:
                             if stat.find("strong").get_text() == 'Record:':
-                                record = re.findall("[0-9]+-[0-9]", stat.get_text())[0]
-                                team_winrate = int(record.split('-')[0]) / int(record.split('-')[0]) + int(record.split('-')[1])
+                                record = re.findall("[0-9]+-[0-9]+", stat.get_text())[0]
+                                team_winrate = int(record.split('-')[0]) / (int(record.split('-')[0]) + int(record.split('-')[1]))
                         player_stats['team_winrate'] = team_winrate
 
                         comments = team_soup.find_all(string=lambda text: isinstance(text, Comment))
