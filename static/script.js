@@ -6,7 +6,7 @@ $(document).ready(function () {
       player = $(this).text().split('(')[0]
       player = player.substring(0, player.length - 1)
     }
-    
+
     $.ajax({
       url: '/get_link_from_name',
       method: 'POST',
@@ -32,7 +32,7 @@ $(document).ready(function () {
   $("#getPlayerStats").on("submit", function (e) {
     e.preventDefault();
     player_name = $("#selectedPlayer").val();
-    player_selector = $("#nbaPlayers")
+    link = $("#nbaPlayers")
       .find('option[value="' + player_name + '"]')
       .data("link");
     year = $("#selectedYear").val();
@@ -42,7 +42,7 @@ $(document).ready(function () {
       method: "POST",
       url: "/player",
       data: {
-        selector: player_selector,
+        link: link,
         year: year,
         playoffs: $("#selectPlayoffs").val()
       },

@@ -153,24 +153,24 @@ def get_player_year_stats(table, selected_year):
 
                         team_3p = sfloat(team_stats.find('td', {'data-stat': 'fg3'}).get_text())
                         team_3pa = sfloat(team_stats.find('td', {'data-stat': 'fg3a'}).get_text())
-                        try:
+                        if team_3pa != 0:
                             player_stats['team_p3_ratio'] = round(team_3p / team_3pa, 3)
-                        except ZeroDivisionError:
-                            player_stats['team_p3_ratio'] = LeagueStats.p3_league_ratio
+                        else:
+                            player_stats['team_p3_ratio'] = 0
 
                         team_2p = sfloat(team_stats.find('td', {'data-stat': 'fg2'}).get_text())
                         team_2pa = sfloat(team_stats.find('td', {'data-stat': 'fg2a'}).get_text())
-                        try:
+                        if team_2pa != 0:
                             player_stats['team_p2_ratio'] = round(team_2p / team_2pa, 3)
-                        except ZeroDivisionError:
-                            player_stats['team_p2_ratio'] = LeagueStats.p2_league_ratio
+                        else:
+                            player_stats['team_p2_ratio'] = 0
 
                         team_ft = sfloat(team_stats.find('td', {'data-stat': 'ft'}).get_text())
                         team_fta = sfloat(team_stats.find('td', {'data-stat': 'fta'}).get_text())
-                        try:
+                        if team_fta != 0:
                             player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
-                        except ZeroDivisionError:
-                            player_stats['team_ft_ratio'] = LeagueStats.ft_league_ratio
+                        else:
+                            player_stats['team_ft_ratio'] = 0
 
                     except (TypeError, AttributeError):
                         # no team info

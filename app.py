@@ -32,21 +32,29 @@ def index():
         top100playoffs_keys=list(top100[1].keys()), # top 100 playoffs names
         top100playoffs_items=list(top100[1].values())) # top 100 playoffs ratings
 
+
 @app.route('/player', methods=['GET', 'POST'])
 def player_stats():
-    playerSelector = request.form['selector']
-    url = "https://www.basketball-reference.com/players/" + playerSelector[0] + "/" + playerSelector + ".html"
+    """This function called when a user checkes rating for a specific player
+
+    Returns:
+        dict: returns the player stats
+    """
+    link = request.form['link']
+    url = "https://www.basketball-reference.com/players/" + link[0] + "/" + link + ".html"
     content = requests.get(url).content
     soup = BeautifulSoup(content, 'html.parser')
 
-    is_playoff = bool(request.form['playoffs'] == 'Playoffs')
-    if is_playoff:
+    # Get the stat table depending on is playoff chosen or not
+    if bool(request.form['playoffs'] == 'Playoffs'):
         player_years = soup.find("table", {'id': 'playoffs_per_game'}).find("tbody").findAll('tr')
     else:
         player_years = soup.find("table", {'id': 'per_game'}).find("tbody").findAll('tr')
 
+    # Get all the per game stats from current year
     player_stats = get_player_year_stats(player_years, request.form['year'])
 
+    # Add the height (not a per game stat)
     try:
         height_line = soup.find('div', {"itemtype": "https://schema.org/Person"}).findAll('p')[3].get_text().strip()
         player_stats['height'] = int(height_line.split('(')[1].split(',')[0][:-2])
