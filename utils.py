@@ -202,10 +202,6 @@ def calc_rating(player_stats):
         blocks = player_stats['blocks']
         turnovers = player_stats['turnovers']
 
-        p3_team_ratio = player_stats['team_p3_ratio']
-        p2_team_ratio = player_stats['team_p2_ratio']
-        ft_team_ratio = player_stats['team_ft_ratio']
-
         p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
         p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
         ft_league_attack_ratio = LeagueStats.ft_league_attack_ratio
@@ -259,9 +255,9 @@ def get_top_100():
             
             for player in data:
                 if player is not None:
-                    if player['rating_season_top100'] > best_rating_season and f"{player['name']} ({player['best_year_season']})" not in best_players_season:
-                        best_rating_season = player['rating_season']
-                        best_name_season = f"{player['name']} ({player['best_year_season']})"
+                    if player['rating_season_top100'] > best_rating_season and f"{player['name']} ({player['best_year_season_top100']})" not in best_players_season:
+                        best_rating_season = player['rating_season_top100']
+                        best_name_season = f"{player['name']} ({player['best_year_season_top100']})"
                     if player['rating_playoffs'] > best_rating_playoffs and f"{player['name']} ({player['best_year_playoffs']})" not in best_players_playoffs:
                         best_rating_playoffs = player['rating_playoffs']
                         best_name_playoffs = f"{player['name']} ({player['best_year_playoffs']})"
