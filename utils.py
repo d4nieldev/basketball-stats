@@ -54,12 +54,6 @@ class LeagueStats:
     p3_league_attack_from_assist_ratio = 0.39
     p2_league_attack_from_assist_ratio = 0.61
 
-
-
-PROBLEMATIC_PLAYERS = {
-    'westbru01': {'drb': -3.5}
-}
-
 def sfloat(string):
     if string == '':
         return 0
