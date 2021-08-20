@@ -199,8 +199,7 @@ $(document).ready(function () {
         ft_team_attack_ratio: ft_team_attack_ratio,
       },
       success: function(response){
-        total = response.rating
-        total = total.toFixed(3);
+        total = response.toFixed(3);
         $("#total").html("ניקוד שחקן: " + total);
         
         $(".player-total").removeClass("d-none");

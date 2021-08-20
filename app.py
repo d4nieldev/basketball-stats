@@ -117,13 +117,18 @@ def get_best_year():
 
 @app.route('/apply_formula', methods=['POST', 'GET'])
 def apply_formula():
+    """Getting the values from the form and sending it to calc_rating
+
+    Returns:
+        float: The total rating for the stats provided
+    """
     values = request.form.to_dict()
 
     for key, val in values.items():
         values[key] = 0 if val == 'NaN' else float(val)
     
     rating = calc_rating(values)
-    return jsonify({'rating': rating})
+    return jsonify(rating)
 
 
 @app.route('/get_link_from_name', methods=['POST', 'GET'])
