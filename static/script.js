@@ -59,7 +59,6 @@ $(document).ready(function () {
         } else {
           // load all stats to screen
           $("#pos").val(response.pos);
-          $("#height").val(response.height);
 
           $("#p3_in").val(response.p3_in);
           $("#p3_attempts").val(response.p3_attempts);

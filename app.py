@@ -54,14 +54,6 @@ def player_stats():
     # Get all the per game stats from current year
     player_stats = get_player_year_stats(player_years, request.form['year'])
 
-    # Add the height (not a per game stat)
-    try:
-        height_line = soup.find('div', {"itemtype": "https://schema.org/Person"}).findAll('p')[3].get_text().strip()
-        player_stats['height'] = int(height_line.split('(')[1].split(',')[0][:-2])
-    except IndexError:
-        height_line = soup.find('div', {"itemtype": "https://schema.org/Person"}).findAll('p')[4].get_text().strip()
-        player_stats['height'] = int(height_line.split('(')[1].split(',')[0][:-2])
-
     return jsonify(player_stats)
 
 
