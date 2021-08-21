@@ -80,21 +80,21 @@ $(document).ready(function () {
 
           $("#p3_on_me").val(response.p3_on_me);
           $("#p3_attempts_on_me").val(response.p3_attempts_on_me);
-          p3_ratio_on_me = response.p3_on_me / response.p3_attempts_on_me;
-          if (!Number.isFinite(p3_ratio_on_me)) p3_ratio_on_me = 0;
-          $("#p3_ratio_on_me").html("3PO% = " + p3_ratio_on_me);
+          p3_on_me_ratio = response.p3_on_me / response.p3_attempts_on_me;
+          if (!Number.isFinite(p3_on_me_ratio)) p3_on_me_ratio = 0;
+          $("#p3_on_me_ratio").html("3PO% = " + p3_on_me_ratio);
 
           $("#p2_on_me").val(response.p2_on_me);
           $("#p2_attempts_on_me").val(response.p2_attempts_on_me);
-          p2_ratio_on_me = response.p2_on_me / response.p2_attempts_on_me;
-          if (!Number.isFinite(p2_ratio_on_me)) p2_ratio_on_me = 0;
-          $("#p2_ratio_on_me").html("2PO% = " + p2_ratio_on_me);
+          p2_on_me_ratio = response.p2_on_me / response.p2_attempts_on_me;
+          if (!Number.isFinite(p2_on_me_ratio)) p2_on_me_ratio = 0;
+          $("#p2_on_me_ratio").html("2PO% = " + p2_on_me_ratio);
 
           $("#ft_on_me").val(response.ft_on_me);
           $("#ft_attempts_on_me").val(response.ft_attempts_on_me);
-          ft_ratio_on_me = response.ft_on_me / response.ft_attempts_on_me;
-          if (!Number.isFinite(ft_ratio_on_me)) ft_ratio_on_me = 0;
-          $("#ft_ratio_on_me").html("FTO% = " + ft_ratio_on_me);
+          ft_on_me_ratio = response.ft_on_me / response.ft_attempts_on_me;
+          if (!Number.isFinite(ft_on_me_ratio)) ft_on_me_ratio = 0;
+          $("#ft_on_me_ratio").html("FTO% = " + ft_on_me_ratio);
 
           $("#assists").val(response.assists);
           $("#d_rebounds").val(response.d_rebounds);
@@ -102,9 +102,6 @@ $(document).ready(function () {
           $("#steals").val(response.steals);
           $("#blocks").val(response.blocks);
           $("#turnovers").val(response.turnovers);
-
-          $("#p3_league_attack_from_assist_ratio").val(response.p3_league_attack_from_assist_ratio);
-          $("#p2_league_attack_from_assist_ratio").val(response.p2_league_attack_from_assist_ratio);
 
           $("#p3_league_attack_ratio").val(response.p3_league_attack_ratio);
           $("#p2_league_attack_ratio").val(response.p2_league_attack_ratio);
