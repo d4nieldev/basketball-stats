@@ -163,18 +163,10 @@ def get_player_year_stats(table, selected_year):
                         else:
                             player_stats['team_p2_ratio'] = 0
 
-                        team_ft = sfloat(team_stats.find('td', {'data-stat': 'ft'}).get_text())
-                        team_fta = sfloat(team_stats.find('td', {'data-stat': 'fta'}).get_text())
-                        if team_fta != 0:
-                            player_stats['team_ft_ratio'] = round(team_ft / team_fta, 3)
-                        else:
-                            player_stats['team_ft_ratio'] = 0
-
                     except (TypeError, AttributeError):
                         # no team info
                         player_stats['team_p3_ratio'] = LeagueStats.p3_league_ratio
-                        player_stats['team_p2_ratio'] = LeagueStats.p2_league_ratio
-                        player_stats['team_ft_ratio'] = LeagueStats.ft_league_ratio    
+                        player_stats['team_p2_ratio'] = LeagueStats.p2_league_ratio  
                 except IndexError:
                     player_stats['error'] = "IndexError"
 

@@ -23,7 +23,7 @@ def index():
             players.append(player_data)
 
      # Get top 100 players
-    top100 = get_top_100()
+    top100 = get_top_100(players_data)
     return render_template(
         'basketball_stats.html', 
         players=players, # load all players to select them

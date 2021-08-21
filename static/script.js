@@ -1,5 +1,17 @@
 $(document).ready(function () {
+  $("#selectedYear").on("change", function () {
+    // show the next part after selecting a year
+    $("#finish-choosing").removeClass("d-none");
+  });
+  $("input[list]").on("click", function () {
+    // zero selection when clicking on a list input
+    $(this).val("");
+  });
+
+
+
   $("table>tbody>tr>th[data-name='True'], table>tbody>tr>td[data-name='True']").each(function(){
+    // for all tables - if data-name is True on a td or th - add link to player
     player = $(this).text()
     var $this = $(this)
     if (~player.indexOf('(')){
@@ -25,31 +37,27 @@ $(document).ready(function () {
     })
   });
 
-  $("input[list]").on("click", function () {
-    $(this).val("");
-  });
-
   $("#getPlayerStats").on("submit", function (e) {
     e.preventDefault();
     player_name = $("#selectedPlayer").val();
     link = $("#nbaPlayers")
       .find('option[value="' + player_name + '"]')
       .data("link");
-    year = $("#selectedYear").val();
-
+    // start loading animation
     $("#loading").css("display", "inline-block");
     $.ajax({
       method: "POST",
       url: "/player",
       data: {
         link: link,
-        year: year,
+        year: year = $("#selectedYear").val(),
         playoffs: $("#selectPlayoffs").val()
       },
       success: function (response) {
         if (response.error == "IndexError") {
           alert("הייתה בעיה עם השנה שנבחרה, אנא בחר שנה אחרת");
         } else {
+          // load all stats to screen
           $("#pos").val(response.pos);
           $("#height").val(response.height);
 
@@ -103,19 +111,18 @@ $(document).ready(function () {
           $("#p2_league_attack_ratio").val(response.p2_league_attack_ratio);
           $("#ft_league_attack_ratio").val(response.ft_league_attack_ratio);
         }
+        // stop loading animation
         $("#loading").css("display", "none");
+        // submit form to get rating
         $("#statistics").trigger("submit");
       },
     });
   });
 
-  $("#selectedYear").on("change", function () {
-    $("#finish-choosing").removeClass("d-none");
-  });
-
   $("#selectedPlayer, #selectPlayoffs").on("change", function () {
-    $("#selectYear").removeClass("d-none");
-    $("#selectedYear").val("");
+    // when changing player selection or game mode
+    $("#selectYear").removeClass("d-none"); // show select year (if not displayed already)
+    $("#selectedYear").val(""); // zero the year selection
     player_name = $("#selectedPlayer").val();
     player_link = "";
     $("#nbaPlayers>option").each(function () {
@@ -123,6 +130,7 @@ $(document).ready(function () {
         player_link = $(this).data("link");
       }
     });
+
     $.ajax({
       type: "POST",
       url: "/get_player_years",
@@ -131,8 +139,8 @@ $(document).ready(function () {
         playoffs: $("#selectPlayoffs").val()
       },
       success: function (data) {
-        console.log(data);
-        $("#years").html("");
+        // add years of player for a selected game mode to selection list
+        $("#years").html(""); // delete other years if present
         data.forEach((element) => {
           $("#years").append("<option value=" + element + ">");
         });
@@ -194,7 +202,6 @@ $(document).ready(function () {
 
     p3_league_attack_from_assist_ratio = parseFloat($("#p3_league_attack_from_assist_ratio").val());
     p2_league_attack_from_assist_ratio = parseFloat($("#p2_league_attack_from_assist_ratio").val());
-    ft_team_attack_ratio = parseFloat($("#ft_team_attack_ratio").val());
 
     $.ajax({
       method: "POST",
@@ -220,7 +227,6 @@ $(document).ready(function () {
         turnovers: turnovers,
         p3_league_attack_from_assist_ratio: p3_league_attack_from_assist_ratio,
         p2_league_attack_from_assist_ratio: p2_league_attack_from_assist_ratio,
-        ft_team_attack_ratio: ft_team_attack_ratio,
       },
       success: function(response){
         total = response.toFixed(3);
@@ -235,8 +241,6 @@ $(document).ready(function () {
         );
       }
     })
-
-    
   });
 
   $("#selectBestYear").on("click", function () {
