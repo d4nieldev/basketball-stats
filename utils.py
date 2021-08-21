@@ -93,8 +93,6 @@ def get_top_100(data):
 
 def get_player_year_stats(table, selected_year):
     player_stats = {}
-    player_stats['p3_league_attack_from_assist_ratio'] = LeagueStats.p3_league_attack_from_assist_ratio
-    player_stats['p2_league_attack_from_assist_ratio'] = LeagueStats.p2_league_attack_from_assist_ratio
 
     for year in table:
         if year.find('th') and year.find('th').find('a'):
@@ -185,46 +183,20 @@ def get_player_year_stats(table, selected_year):
 def calc_rating(player_stats):
     if not 'error' in player_stats:
         p3_in = player_stats['p3_in']
-        p3_attempts = player_stats['p3_attempts']
-        try:
-            p3_ratio = p3_in / p3_attempts
-        except ZeroDivisionError:
-            p3_ratio = 0
-        
         p2_in = player_stats['p2_in']
-        p2_attempts = player_stats['p2_attempts']
-        try:
-            p2_ratio = p2_in / p2_attempts
-        except ZeroDivisionError:
-            p2_ratio = 0
-
         ft_in = player_stats['ft_in']
-        ft_attempts = player_stats['ft_attempts']
-        try:
-            ft_ratio = ft_in / ft_attempts
-        except ZeroDivisionError:
-            ft_ratio = 0
-        
-        p3_on_me = player_stats['p3_on_me']
-        p3_attempts_on_me = player_stats['p3_attempts_on_me']
-        try:
-            p3_ratio_on_me = p3_on_me / p3_attempts_on_me
-        except ZeroDivisionError:
-            p3_ratio_on_me = 0
-        
-        p2_on_me = player_stats['p2_on_me']
-        p2_attempts_on_me = player_stats['p2_attempts_on_me']
-        try:
-            p2_ratio_on_me = p2_on_me / p2_attempts_on_me
-        except ZeroDivisionError:
-            p2_ratio_on_me = 0
 
+        p3_on_me = player_stats['p3_on_me']
+        p2_on_me = player_stats['p2_on_me']
         ft_on_me = player_stats['ft_on_me']
-        ft_attempts_on_me = player_stats['ft_attempts_on_me']
-        try:
-            ft_ratio_on_me = ft_on_me / ft_attempts_on_me
-        except ZeroDivisionError:
-            ft_ratio_on_me = 0
+
+        p3_ratio = player_stats['p3_ratio']
+        p2_ratio = player_stats['p2_ratio']
+        ft_ratio = player_stats['ft_ratio']
+
+        p3_on_me_ratio = player_stats['p3_on_me_ratio']
+        p2_on_me_ratio = player_stats['p2_on_me_ratio']
+        ft_on_me_ratio = player_stats['ft_on_me_ratio']
 
         assists = player_stats['assists']
         d_rebounds = player_stats['d_rebounds']
@@ -232,17 +204,6 @@ def calc_rating(player_stats):
         steals = player_stats['steals']
         blocks = player_stats['blocks']
         turnovers = player_stats['turnovers']
-
-        p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
-        p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
-        ft_league_attack_ratio = LeagueStats.ft_league_attack_ratio
-
-        p3_league_ratio = LeagueStats.p3_league_ratio
-        p2_league_ratio = LeagueStats.p2_league_ratio
-        ft_league_ratio = LeagueStats.ft_league_ratio
-
-        p3_league_attack_from_assist_ratio = player_stats['p3_league_attack_from_assist_ratio']
-        p2_league_attack_from_assist_ratio = player_stats['p2_league_attack_from_assist_ratio']
 
         if assists <= LeagueStats.ast_min_val:
             assists = LeagueStats.ast_min_val
@@ -252,17 +213,17 @@ def calc_rating(player_stats):
         else:
             p3_multiplier = 3
 
-        z1 = 3 * p3_league_attack_ratio * ((p3_league_ratio + LeagueStats.stl_p3) ** 2) + 2 * p2_league_attack_ratio * ((p2_league_ratio + LeagueStats.stl_p2) ** 2) + 2 * (ft_league_ratio ** 2) * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (p2_league_ratio ** 2))
-        z2 = 3 * p3_league_attack_ratio * ((p3_league_ratio + LeagueStats.tov_p3) ** 2) + 2 * p2_league_attack_ratio * ((p2_league_ratio + LeagueStats.tov_p2) ** 2) + 2 * (ft_league_ratio ** 2) * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (p2_league_ratio ** 2))
+        z1 = 3 * LeagueStats.p3_league_attack_ratio * ((LeagueStats.p3_league_ratio + LeagueStats.stl_p3) ** 2) + 2 * LeagueStats.p2_league_attack_ratio * ((LeagueStats.p2_league_ratio + LeagueStats.stl_p2) ** 2) + 2 * (LeagueStats.ft_league_ratio ** 2) * LeagueStats.ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2))
+        z2 = 3 * LeagueStats.p3_league_attack_ratio * ((LeagueStats.p3_league_ratio + LeagueStats.tov_p3) ** 2) + 2 * LeagueStats.p2_league_attack_ratio * ((LeagueStats.p2_league_ratio + LeagueStats.tov_p2) ** 2) + 2 * (LeagueStats.ft_league_ratio ** 2) * LeagueStats.ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2))
 
         tov_value = (z2 - LeagueStats.stl_chance * z1) / (1 + LeagueStats.tov_chance * LeagueStats.stl_chance)
         stl_value = z1 - LeagueStats.tov_chance * tov_value
         assist_val = 3 * LeagueStats.p3_league_ratio * LeagueStats.p3_league_attack_from_assist_ratio + 2 * LeagueStats.p2_league_ratio * LeagueStats.p2_league_attack_from_assist_ratio
-        d_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio ** 2) + 2 * p2_league_attack_ratio * (p2_league_ratio ** 2) + 2 * ft_league_ratio * (ft_league_attack_ratio ** 2) - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2)) - LeagueStats.tov_chance * tov_value
-        off_rebound_val = 3 * p3_league_attack_ratio * ((p3_league_ratio + LeagueStats.orb_p3) ** 2) + 2 * p2_league_attack_ratio * ((p2_league_ratio + LeagueStats.orb_p2) ** 2) + 2 * (ft_league_ratio ** 2) * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2)) - LeagueStats.tov_chance * tov_value
+        d_rebound_val = 3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2) + 2 * LeagueStats.ft_league_ratio * (LeagueStats.ft_league_attack_ratio ** 2) - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2)) - LeagueStats.tov_chance * tov_value
+        off_rebound_val = 3 * LeagueStats.p3_league_attack_ratio * ((LeagueStats.p3_league_ratio + LeagueStats.orb_p3) ** 2) + 2 * LeagueStats.p2_league_attack_ratio * ((LeagueStats.p2_league_ratio + LeagueStats.orb_p2) ** 2) + 2 * (LeagueStats.ft_league_ratio ** 2) * LeagueStats.ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2)) - LeagueStats.tov_chance * tov_value
         block_val = 0.57 * d_rebound_val
 
-        total = p3_multiplier * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * (turnovers / (LeagueStats.stl_turnovers * assists)) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+        total = p3_multiplier * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * (turnovers / (LeagueStats.stl_turnovers * assists)) - (3 * p3_on_me * p3_on_me_ratio + 2 * p2_on_me * p2_on_me_ratio + 1 * ft_on_me * ft_on_me_ratio)
 
         return total
     return 0

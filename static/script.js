@@ -145,21 +145,45 @@ $(document).ready(function () {
 
     p3_in = parseFloat($("#p3_in").val());
     p3_attempts = parseFloat($("#p3_attempts").val());
+    if (p3_attempts == 0)
+      p3_ratio = 0
+    else
+      p3_ratio = p3_in / p3_attempts
 
     p2_in = parseFloat($("#p2_in").val());
     p2_attempts = parseFloat($("#p2_attempts").val());
+    if (p2_attempts == 0)
+      p2_ratio = 0
+    else
+      p2_ratio = p2_in / p2_attempts
 
     ft_in = parseFloat($("#ft_in").val());
     ft_attempts = parseFloat($("#ft_attempts").val());
+    if (ft_attempts == 0)
+      ft_ratio = 0
+    else
+      ft_ratio = ft_in / ft_attempts
 
     p3_on_me = parseFloat($("#p3_on_me").val());
     p3_attempts_on_me = parseFloat($("#p3_attempts_on_me").val());
+    if (p3_attempts_on_me == 0)
+      p3_attempts_on_me_ratio = 0
+    else
+      p3_on_me_ratio = p3_on_me / p3_attempts_on_me
 
     p2_on_me = parseFloat($("#p2_on_me").val());
     p2_attempts_on_me = parseFloat($("#p2_attempts_on_me").val());
+    if (p2_attempts_on_me == 0)
+      p2_attempts_on_me_ratio = 0
+    else
+      p2_on_me_ratio = p2_on_me / p2_attempts_on_me
 
     ft_on_me = parseFloat($("#ft_on_me").val());
     ft_attempts_on_me = parseFloat($("#ft_attempts_on_me").val());
+    if (ft_attempts_on_me == 0)
+      ft_attempts_on_me_ratio = 0
+    else
+      ft_on_me_ratio = ft_on_me / ft_attempts_on_me
 
     assists = parseFloat($("#assists").val());
     d_rebounds = parseFloat($("#d_rebounds").val());
@@ -177,17 +201,17 @@ $(document).ready(function () {
       url: '/apply_formula',
       data:{
         p3_in: p3_in,
-        p3_attempts: p3_attempts,
         p2_in: p2_in,
-        p2_attempts: p2_attempts,
         ft_in: ft_in,
-        ft_attempts: ft_attempts,
         p3_on_me: p3_on_me,
-        p3_attempts_on_me: p3_attempts,
         p2_on_me: p2_on_me,
-        p2_attempts_on_me: p2_attempts,
         ft_on_me: ft_on_me,
-        ft_attempts_on_me: ft_attempts,
+        p3_ratio: p3_ratio,
+        p2_ratio: p2_ratio,
+        ft_ratio: ft_ratio,
+        p3_on_me_ratio: p3_on_me_ratio,
+        p2_on_me_ratio: p2_on_me_ratio,
+        ft_on_me_ratio: ft_on_me_ratio,
         assists: assists,
         d_rebounds: d_rebounds,
         off_rebound: off_rebound,
