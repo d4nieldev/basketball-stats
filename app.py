@@ -133,6 +133,11 @@ def apply_formula():
 
 @app.route('/get_link_from_name', methods=['POST', 'GET'])
 def get_link_from_name():
+    """Get the link for a player
+
+    Returns:
+        str: link to player
+    """
     player_name = request.form.to_dict()['player_name']
 
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
