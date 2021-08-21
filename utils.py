@@ -102,21 +102,36 @@ def get_player_year_stats(table, selected_year):
 
                     player_stats['p3_in'] = sfloat(year.find('td', {'data-stat': 'fg3_per_g'}).get_text())
                     player_stats['p3_attempts'] = sfloat(year.find('td', {'data-stat': 'fg3a_per_g'}).get_text())
+                    if player_stats['p3_attempts'] != 0:
+                        player_stats['p3_ratio'] = player_stats['p3_in'] / player_stats['p3_attempts']
+                    else:
+                        player_stats['p3_ratio'] = 0
 
                     player_stats['p2_in'] = sfloat(year.find('td', {'data-stat': 'fg2_per_g'}).get_text())
                     player_stats['p2_attempts'] = sfloat(year.find('td', {'data-stat': 'fg2a_per_g'}).get_text())
+                    if player_stats['p2_attempts'] != 0:
+                        player_stats['p2_ratio'] = player_stats['p2_in'] / player_stats['p2_attempts']
+                    else:
+                        player_stats['p2_ratio'] = 0
 
                     player_stats['ft_in'] = sfloat(year.find('td', {'data-stat': 'ft_per_g'}).get_text())
                     player_stats['ft_attempts'] = sfloat(year.find('td', {'data-stat': 'fta_per_g'}).get_text())
+                    if player_stats['ft_attempts'] != 0:
+                        player_stats['ft_ratio'] = player_stats['ft_in'] / player_stats['ft_attempts']
+                    else:
+                        player_stats['ft_ratio'] = 0
 
                     player_stats['p3_on_me'] = 0
                     player_stats['p3_attempts_on_me'] = 0
+                    player_stats['p3_on_me_ratio'] = 0
 
                     player_stats['p2_on_me'] = 0
                     player_stats['p2_attempts_on_me'] = 0
+                    player_stats['p2_on_me_ratio'] = 0
 
                     player_stats['ft_on_me'] = 0
                     player_stats['ft_attempts_on_me'] = 0
+                    player_stats['ft_on_me_ratio'] = 0
 
                     player_stats['assists'] = sfloat(year.find('td', {'data-stat': 'ast_per_g'}).get_text())
                     player_stats['d_rebounds'] = sfloat(year.find('td', {'data-stat': 'drb_per_g'}).get_text())
