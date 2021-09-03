@@ -47,9 +47,12 @@ class LeagueStats:
 
     good_shooter_minimum_3p = 1.3
     good_shooter_minimum_ratio = 0.401
-    good_shooter_3p_multiplier = 3.3
+    good_shooter_3p_multiplier = 3.2
 
     ast_min_val = 0.5
+
+    ast_min_val_tov = 3
+    stl_turnovers_low_ast = 0.8
 
     p3_league_attack_from_assist_ratio = 0.37
     p2_league_attack_from_assist_ratio = 1 - p3_league_attack_from_assist_ratio
