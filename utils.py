@@ -51,9 +51,6 @@ class LeagueStats:
 
     ast_min_val = 0.5
 
-    ast_min_val_tov = 3
-    stl_turnovers_low_ast = 0.8
-
     p3_league_attack_from_assist_ratio = 0.37
     p2_league_attack_from_assist_ratio = 1 - p3_league_attack_from_assist_ratio
 
