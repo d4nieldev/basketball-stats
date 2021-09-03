@@ -2,7 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 from bs4 import Comment
-from flask import Flask, json, jsonify, request
+from flask import Flask, json, jsonify
 import json
 import re
 
@@ -205,7 +205,6 @@ def calc_rating(player_stats):
 
         p3_team_ratio = player_stats['team_p3_ratio']
         p2_team_ratio = player_stats['team_p2_ratio']
-        ft_team_ratio = player_stats['team_ft_ratio']
 
         p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
         p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
