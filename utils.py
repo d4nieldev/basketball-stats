@@ -51,8 +51,8 @@ class LeagueStats:
 
     ast_min_val = 0.5
 
-    p3_league_attack_from_assist_ratio = 0.39
-    p2_league_attack_from_assist_ratio = 0.61
+    p3_league_attack_from_assist_ratio = 0.37
+    p2_league_attack_from_assist_ratio = 1 - p3_league_attack_from_assist_ratio
 
 def sfloat(string):
     if string == '':
