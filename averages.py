@@ -108,7 +108,7 @@ def get_stats(link):
                 orbs['total'].append(sfloat(row.find('td', {'data-stat': 'orb_per_g'}).get_text()))
 
                 # for only players from year 2020, do the above for 3P
-                if int(row.find('th').find('a').get_text().split('-')[0]) == 2020:
+                if int(row.find('th').find('a').get_text().split('-')[0]) >= 2016:
                     p3 = sfloat(row.find('td', {'data-stat': 'fg3_per_g'}).get_text())
                     p3pc = sfloat(row.find('td', {'data-stat': 'fg3_pct'}).get_text())
 
