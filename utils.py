@@ -203,9 +203,6 @@ def calc_rating(player_stats):
         blocks = player_stats['blocks']
         turnovers = player_stats['turnovers']
 
-        p3_team_ratio = player_stats['team_p3_ratio']
-        p2_team_ratio = player_stats['team_p2_ratio']
-
         p3_league_attack_ratio = LeagueStats.p3_league_attack_ratio
         p2_league_attack_ratio = LeagueStats.p2_league_attack_ratio
         ft_league_attack_ratio = LeagueStats.ft_league_attack_ratio
