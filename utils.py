@@ -51,9 +51,6 @@ class LeagueStats:
 
     ast_min_val = 0.5
 
-    ast_min_val_tov = 3
-    stl_turnovers_low_assist = 0.8
-
 def sfloat(string):
     if string == '':
         return 0
@@ -220,15 +217,8 @@ def calc_rating(player_stats):
         p3_team_attack_ratio = player_stats['p3_team_attack_ratio']
         p2_team_attack_ratio = player_stats['p2_team_attack_ratio']
 
-        stl_turnovers = LeagueStats.stl_turnovers
-
         if assists <= LeagueStats.ast_min_val:
             assists = LeagueStats.ast_min_val
-        
-        if assists <= LeagueStats.ast_min_val_tov:
-            stl_turnovers = LeagueStats.stl_turnovers_low_assist
-        else:
-            stl_turnovers = LeagueStats.stl_turnovers
         
         if p3_ratio >= LeagueStats.good_shooter_minimum_ratio and p3_in >= LeagueStats.good_shooter_minimum_3p:
             p3_multiplier = LeagueStats.good_shooter_3p_multiplier
@@ -245,7 +235,7 @@ def calc_rating(player_stats):
         off_rebound_val = 3 * p3_league_attack_ratio * ((p3_league_ratio + LeagueStats.orb_p3) ** 2) + 2 * p2_league_attack_ratio * ((p2_league_ratio + LeagueStats.orb_p2) ** 2) + 2 * (ft_league_ratio ** 2) * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2)) - LeagueStats.tov_chance * tov_value
         block_val = 0.57 * d_rebound_val
 
-        total = p3_multiplier * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * (turnovers / (stl_turnovers * assists)) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
+        total = p3_multiplier * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * (turnovers / (LeagueStats.stl_turnovers * assists)) - (3 * p3_on_me * p3_ratio_on_me + 2 * p2_on_me * p2_ratio_on_me + 1 * ft_on_me * ft_ratio_on_me)
 
         return total
     return 0
