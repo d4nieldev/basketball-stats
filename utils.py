@@ -226,7 +226,7 @@ def calc_rating(player_stats):
 
         tov_value = (z2 - LeagueStats.stl_chance * z1) / (1 + LeagueStats.tov_chance * LeagueStats.stl_chance)
         stl_value = z1 - LeagueStats.tov_chance * tov_value
-        assist_val = 0.48 * (3 * LeagueStats.p3_league_attack_from_assist_ratio + 2 * LeagueStats.p2_league_attack_from_assist_ratio)
+        assist_val = 0.66 * (3 * LeagueStats.p3_league_attack_from_assist_ratio + 2 * LeagueStats.p2_league_attack_from_assist_ratio)
         d_rebound_val = 3 * p3_league_attack_ratio * p3_league_ratio + 2 * p2_league_attack_ratio * p2_league_ratio + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * tov_value
         off_rebound_val = 3 * p3_league_attack_ratio * (p3_league_ratio + LeagueStats.orb_p3) + 2 * p2_league_attack_ratio * (p2_league_ratio + LeagueStats.orb_p2) + 2 * ft_league_ratio * ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * LeagueStats.p3_league_ratio + 2 * LeagueStats.p2_league_attack_ratio * LeagueStats.p2_league_ratio) - LeagueStats.tov_chance * tov_value
         block_val = 0.57 * d_rebound_val
