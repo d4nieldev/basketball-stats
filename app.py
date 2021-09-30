@@ -28,7 +28,10 @@ def index():
         top100season_keys=list(top100[0].keys()),
         top100season_items=list(top100[0].values()), 
         top100playoffs_keys=list(top100[1].keys()),
-        top100playoffs_items=list(top100[1].values()))
+        top100playoffs_items=list(top100[1].values()),
+        top100avg_keys=list(top100[2].keys()),
+        top100avg_items=list(top100[2].values())
+    )
 
 @app.route('/player', methods=['GET', 'POST'])
 def player_stats():
