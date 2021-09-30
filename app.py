@@ -26,11 +26,14 @@ def index():
     top100 = get_top_100(players_data)
     return render_template(
         'basketball_stats.html', 
-        players=players, # load all players to select them
-        top100season_keys=list(top100[0].keys()), # top 100 season names
-        top100season_items=list(top100[0].values()), # top 100 season ratings
-        top100playoffs_keys=list(top100[1].keys()), # top 100 playoffs names
-        top100playoffs_items=list(top100[1].values())) # top 100 playoffs ratings
+        players=players, 
+        top100season_keys=list(top100[0].keys()),
+        top100season_items=list(top100[0].values()), 
+        top100playoffs_keys=list(top100[1].keys()),
+        top100playoffs_items=list(top100[1].values()),
+        top100avg_keys=list(top100[2].keys()),
+        top100avg_items=list(top100[2].values())
+    )
 
 
 @app.route('/player', methods=['GET', 'POST'])

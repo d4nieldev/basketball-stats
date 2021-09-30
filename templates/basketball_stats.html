@@ -265,7 +265,24 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    
+                    <br />
+                    <h3 style="font-family: Tahoma;">טבלת ממוצע בין הפלייאוף לעונה רגילה</h3>
+                    <table id="top100avg" class="table w-50" dir="rtl" style="font-family: Tahoma;">
+                        <thead>
+                            <th scope="col">#</th>
+                            <th scope="col">שם השחקן</th>
+                            <th scope="col">דירוג</th>
+                        </thead>
+                        <tbody>
+                            {% for i in range(100) %}
+                            <tr>
+                                <th scope="row">{{ i + 1 }}</th>
+                                <th data-name="True"><a class="link-dark text-decoration-none" href="">{{ top100avg_keys[i] }}</a></th>
+                                <td>{{ top100avg_items[i] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             

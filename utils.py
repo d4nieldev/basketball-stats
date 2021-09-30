@@ -66,6 +66,7 @@ def sfloat(string):
 def get_top_100(data):
     best_players_season = {}
     best_players_playoffs = {}
+    best_players_avg = {}
 
     for _ in range(100):
         best_rating_season = 0
@@ -73,22 +74,27 @@ def get_top_100(data):
         
         best_rating_playoffs = 0
         best_name_playoffs = ''
+
+        best_rating_avg = 0
+        best_name_avg = ''
         
         for player in data:
             if player is not None:
-                # player needs to be the best of the unchecked
-                if player['rating_season_top100'] > best_rating_season and f"{player['name']} ({player['best_year_season_top100']})" not in best_players_season:
-                    # on season, count only the best year that can be top100!
+                if player['rating_season_top100'] > best_rating_season and f"{player['name']}" not in best_players_season:
                     best_rating_season = player['rating_season_top100']
-                    best_name_season = f"{player['name']} ({player['best_year_season_top100']})"
-                if player['rating_playoffs'] > best_rating_playoffs and f"{player['name']} ({player['best_year_playoffs']})" not in best_players_playoffs:
+                    best_name_season = player['name']
+                if player['rating_playoffs'] > best_rating_playoffs and f"{player['name']}" not in best_players_playoffs:
                     best_rating_playoffs = player['rating_playoffs']
-                    best_name_playoffs = f"{player['name']} ({player['best_year_playoffs']})"
+                    best_name_playoffs = player['name']
+                if player['season_playoff_avg'] > best_rating_avg and f"{player['name']}" not in best_players_avg:
+                    best_rating_avg = player['season_playoff_avg']
+                    best_name_avg = player['name']
         
         best_players_season[best_name_season] = round(best_rating_season, 5)
         best_players_playoffs[best_name_playoffs] = round(best_rating_playoffs, 5)
-    
-    return best_players_season, best_players_playoffs
+        best_players_avg[best_name_avg] = round(best_rating_avg, 5)
+
+    return best_players_season, best_players_playoffs, best_players_avg
 
 
 def get_player_year_stats(table, selected_year):
