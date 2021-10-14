@@ -236,7 +236,7 @@ def calc_rating(player_stats):
         off_rebound_val = 3 * LeagueStats.p3_league_attack_ratio * ((LeagueStats.p3_league_ratio + LeagueStats.orb_p3) ** 2) + 2 * LeagueStats.p2_league_attack_ratio * ((LeagueStats.p2_league_ratio + LeagueStats.orb_p2) ** 2) + 2 * (LeagueStats.ft_league_ratio ** 2) * LeagueStats.ft_league_attack_ratio - LeagueStats.block_chance * (3 * LeagueStats.p3_league_attack_ratio * (LeagueStats.p3_league_ratio ** 2) + 2 * LeagueStats.p2_league_attack_ratio * (LeagueStats.p2_league_ratio ** 2)) - LeagueStats.tov_chance * tov_value
         block_val = 0.57 * d_rebound_val
 
-        total = p3_multiplier * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * (turnovers / (LeagueStats.stl_turnovers * assists)) - (3 * p3_on_me * p3_on_me_ratio + 2 * p2_on_me * p2_on_me_ratio + 1 * ft_on_me * ft_on_me_ratio)
+        total = p3_multiplier * p3_in * p3_ratio + 2 * p2_in * p2_ratio + 1 * ft_in * ft_ratio + assist_val * assists + d_rebound_val * d_rebounds + off_rebound_val * off_rebound + stl_value * steals + block_val * blocks -  tov_value * ((turnovers * LeagueStats.stl_turnovers) / assists) - (3 * p3_on_me * p3_on_me_ratio + 2 * p2_on_me * p2_on_me_ratio + 1 * ft_on_me * ft_on_me_ratio)
 
         return total
     return 0
